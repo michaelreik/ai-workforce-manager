@@ -1,0 +1,107 @@
+{
+  "common": {
+    "appName": "AI Workforce Manager",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search...",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "viewAll": "View All"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "agents": "Agents",
+    "budget": "Budget",
+    "analytics": "Analytics",
+    "alerts": "Alerts",
+    "settings": "Settings"
+  },
+  "header": {
+    "dailyBudget": "Daily Budget",
+    "activeAgents": "Active Agents",
+    "alerts": "Alerts",
+    "profile": "Profile",
+    "orgSettings": "Organization Settings",
+    "logout": "Log Out"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "createOrg": "Create Organization",
+    "orgName": "Organization Name",
+    "orgSlug": "Organization Slug"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "totalSpent": "Total Spent Today",
+    "totalBudget": "Total Budget",
+    "activeAgents": "Active Agents",
+    "alertsToday": "Alerts Today",
+    "quickControls": "Quick Controls",
+    "atRisk": "Agents at Risk",
+    "pauseAll": "Pause All Agents"
+  },
+  "agents": {
+    "title": "Agents",
+    "addAgent": "Add Agent",
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "error": "Error",
+      "stopped": "Stopped"
+    },
+    "details": "Details",
+    "pause": "Pause",
+    "resume": "Resume",
+    "kill": "Kill",
+    "overview": "Overview",
+    "taskHistory": "Task History",
+    "guardrails": "Guardrails",
+    "auditLog": "Audit Log"
+  },
+  "budget": {
+    "title": "Budget",
+    "totalMonthly": "Total Monthly Budget",
+    "totalSpent": "Total Spent This Month",
+    "remaining": "Remaining",
+    "projected": "Projected Month-End",
+    "allocate": "Allocate Budget"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "costOverview": "Cost Overview",
+    "agentPerformance": "Agent Performance",
+    "modelComparison": "Model Comparison",
+    "roi": "ROI"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "acknowledge": "Acknowledge",
+    "resolve": "Resolve",
+    "severity": {
+      "info": "Info",
+      "warning": "Warning",
+      "critical": "Critical"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General",
+    "members": "Members",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "apiKeys": "API Keys",
+    "integration": "Integration"
+  }
+}

@@ -1,0 +1,133 @@
+export type Organization = {
+  id: string;
+  name: string;
+  slug: string;
+  stripe_customer_id: string | null;
+  plan: "free" | "pro" | "enterprise";
+  created_at: string;
+};
+
+export type OrgMember = {
+  id: string;
+  org_id: string;
+  user_id: string;
+  role: "viewer" | "manager" | "admin" | "owner";
+  created_at: string;
+};
+
+export type Team = {
+  id: string;
+  org_id: string;
+  name: string;
+  budget_monthly: number;
+  description: string | null;
+  created_at: string;
+};
+
+export type AgentStatus = "active" | "paused" | "error" | "stopped";
+
+export type Guardrails = {
+  max_budget_daily: number | null;
+  max_budget_monthly: number | null;
+  max_task_duration_seconds: number | null;
+  max_tokens_per_request: number | null;
+  spike_detection: boolean;
+  auto_pause_on_budget: boolean;
+  auto_downgrade_model: boolean;
+};
+
+export type Agent = {
+  id: string;
+  org_id: string;
+  team_id: string | null;
+  name: string;
+  description: string | null;
+  status: AgentStatus;
+  model: string;
+  fallback_model: string | null;
+  tags: string[];
+  guardrails: Guardrails;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TaskStatus = "running" | "completed" | "failed" | "killed";
+
+export type Task = {
+  id: string;
+  org_id: string;
+  agent_id: string;
+  status: TaskStatus;
+  model_used: string;
+  tokens_input: number;
+  tokens_output: number;
+  cost: number;
+  duration_ms: number | null;
+  task_type: string | null;
+  result_quality: number | null;
+  output_units: number;
+  error_message: string | null;
+  metadata: Record<string, unknown>;
+  started_at: string;
+  finished_at: string | null;
+};
+
+export type BudgetEntry = {
+  id: string;
+  org_id: string;
+  agent_id: string | null;
+  team_id: string | null;
+  period_type: "daily" | "weekly" | "monthly";
+  period_start: string;
+  allocated: number;
+  spent: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AlertSeverity = "info" | "warning" | "critical";
+export type AlertType =
+  | "budget_warning"
+  | "budget_exceeded"
+  | "rate_limit"
+  | "error_spike"
+  | "loop_detected"
+  | "kill_switch";
+
+export type Alert = {
+  id: string;
+  org_id: string;
+  agent_id: string | null;
+  type: AlertType;
+  severity: AlertSeverity;
+  message: string;
+  acknowledged: boolean;
+  acknowledged_by: string | null;
+  resolved: boolean;
+  created_at: string;
+};
+
+export type ApiKey = {
+  id: string;
+  org_id: string;
+  name: string;
+  key_hash: string;
+  key_prefix: string;
+  agent_id: string | null;
+  permissions: string[];
+  last_used_at: string | null;
+  expires_at: string | null;
+  created_at: string;
+};
+
+export type AuditLog = {
+  id: string;
+  org_id: string;
+  user_id: string | null;
+  action: string;
+  target_type: string | null;
+  target_id: string | null;
+  details: Record<string, unknown>;
+  created_at: string;
+};

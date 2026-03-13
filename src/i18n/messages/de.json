@@ -1,0 +1,107 @@
+{
+  "common": {
+    "appName": "AI Workforce Manager",
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "search": "Suchen...",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "viewAll": "Alle anzeigen"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "agents": "Agenten",
+    "budget": "Budget",
+    "analytics": "Analytik",
+    "alerts": "Alarme",
+    "settings": "Einstellungen"
+  },
+  "header": {
+    "dailyBudget": "Tagesbudget",
+    "activeAgents": "Aktive Agenten",
+    "alerts": "Alarme",
+    "profile": "Profil",
+    "orgSettings": "Organisationseinstellungen",
+    "logout": "Abmelden"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "createOrg": "Organisation erstellen",
+    "orgName": "Organisationsname",
+    "orgSlug": "Organisations-Slug"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück",
+    "totalSpent": "Heute ausgegeben",
+    "totalBudget": "Gesamtbudget",
+    "activeAgents": "Aktive Agenten",
+    "alertsToday": "Alarme heute",
+    "quickControls": "Schnellsteuerung",
+    "atRisk": "Gefährdete Agenten",
+    "pauseAll": "Alle Agenten pausieren"
+  },
+  "agents": {
+    "title": "Agenten",
+    "addAgent": "Agent hinzufügen",
+    "status": {
+      "active": "Aktiv",
+      "paused": "Pausiert",
+      "error": "Fehler",
+      "stopped": "Gestoppt"
+    },
+    "details": "Details",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "kill": "Beenden",
+    "overview": "Übersicht",
+    "taskHistory": "Aufgabenverlauf",
+    "guardrails": "Leitplanken",
+    "auditLog": "Prüfprotokoll"
+  },
+  "budget": {
+    "title": "Budget",
+    "totalMonthly": "Monatliches Gesamtbudget",
+    "totalSpent": "Diesen Monat ausgegeben",
+    "remaining": "Verbleibend",
+    "projected": "Voraussichtliches Monatsende",
+    "allocate": "Budget zuweisen"
+  },
+  "analytics": {
+    "title": "Analytik",
+    "costOverview": "Kostenübersicht",
+    "agentPerformance": "Agentenleistung",
+    "modelComparison": "Modellvergleich",
+    "roi": "ROI"
+  },
+  "alerts": {
+    "title": "Alarme",
+    "acknowledge": "Bestätigen",
+    "resolve": "Lösen",
+    "severity": {
+      "info": "Info",
+      "warning": "Warnung",
+      "critical": "Kritisch"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "general": "Allgemein",
+    "members": "Mitglieder",
+    "billing": "Abrechnung",
+    "notifications": "Benachrichtigungen",
+    "apiKeys": "API-Schlüssel",
+    "integration": "Integration"
+  }
+}
