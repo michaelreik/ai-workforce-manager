@@ -45,7 +45,7 @@ export function AppSidebar() {
             AI
           </div>
           <span className="font-semibold text-sm group-data-[collapsible=icon]:hidden">
-            AI Workforce
+            OpenManage AI
           </span>
         </Link>
       </SidebarHeader>
