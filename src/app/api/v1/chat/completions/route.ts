@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/service";
 import { calculateCost, getProvider, MODEL_PRICING } from "@/lib/pricing";
+import { createAlert } from "@/lib/alerts";
 import crypto from "crypto";
 import type { Agent, BudgetEntry, Guardrails } from "@/types/database";
 
@@ -339,7 +340,8 @@ async function recordUsage(
       const pct = (totalSpent / guardrails.max_budget_monthly) * 100;
 
       if (pct >= 100) {
-        await supabase.from("alerts").insert({
+        await createAlert({
+          supabase: supabase as never,
           org_id: orgId,
           agent_id: agentId,
           type: "budget_exceeded",
@@ -366,7 +368,8 @@ async function recordUsage(
           .limit(1);
 
         if (!recentAlerts || recentAlerts.length === 0) {
-          await supabase.from("alerts").insert({
+          await createAlert({
+            supabase: supabase as never,
             org_id: orgId,
             agent_id: agentId,
             type: "budget_warning",
@@ -379,6 +382,71 @@ async function recordUsage(
   }
 
   return cost;
+}
+
+// --- Spike detection ---
+
+async function checkSpikeDetection(
+  supabase: ReturnType<typeof createClient>,
+  orgId: string,
+  agentId: string,
+  agentName: string,
+  currentCost: number,
+  guardrails: Guardrails
+) {
+  if (!guardrails.spike_detection || currentCost === 0) return;
+
+  // Get the last 20 completed tasks for this agent to compute rolling average
+  const { data: recentTasks } = await supabase
+    .from("tasks")
+    .select("cost")
+    .eq("org_id", orgId)
+    .eq("agent_id", agentId)
+    .eq("status", "completed")
+    .order("started_at", { ascending: false })
+    .limit(21); // 21 because the current task is already inserted
+
+  if (!recentTasks || recentTasks.length < 6) return; // Need enough history
+
+  // Exclude the current task (most recent) from the average calculation
+  const historicalTasks = recentTasks.slice(1);
+  const avgCost =
+    historicalTasks.reduce((sum, t) => sum + Number(t.cost), 0) /
+    historicalTasks.length;
+
+  if (avgCost <= 0) return;
+
+  if (currentCost > avgCost * 3) {
+    // Create spike alert
+    await createAlert({
+      supabase: supabase as never,
+      org_id: orgId,
+      agent_id: agentId,
+      type: "kill_switch",
+      severity: "critical",
+      message: `Spike detected for ${agentName}: task cost $${currentCost.toFixed(4)} is ${(currentCost / avgCost).toFixed(1)}x the rolling average ($${avgCost.toFixed(4)})`,
+    });
+
+    // Auto-pause the agent
+    await supabase
+      .from("agents")
+      .update({ status: "paused" })
+      .eq("id", agentId);
+
+    // Create audit log entry
+    await supabase.from("audit_log").insert({
+      org_id: orgId,
+      action: "agent_paused",
+      target_type: "agent",
+      target_id: agentId,
+      details: {
+        reason: "spike_detection",
+        current_cost: currentCost,
+        rolling_average: avgCost,
+        multiplier: currentCost / avgCost,
+      },
+    });
+  }
 }
 
 // --- Main handler ---
@@ -488,12 +556,13 @@ export async function POST(request: NextRequest) {
     guardrails
   );
   if (budgetCheck.exceeded) {
-    await supabase.from("alerts").insert({
+    await createAlert({
+      supabase: supabase as never,
       org_id: agent.org_id,
       agent_id: agent.id,
       type: "budget_exceeded",
       severity: "critical",
-      message: budgetCheck.message,
+      message: budgetCheck.message || "Budget exceeded",
     });
 
     if (guardrails.auto_pause_on_budget) {
@@ -578,7 +647,8 @@ export async function POST(request: NextRequest) {
         }
 
         // Create failover alert
-        await supabase.from("alerts").insert({
+        await createAlert({
+          supabase: supabase as never,
           org_id: agent.org_id,
           agent_id: agent.id,
           type: "rate_limit",
@@ -689,7 +759,7 @@ export async function POST(request: NextRequest) {
   const outputTokens = usage?.completion_tokens || 0;
 
   // Record usage
-  await recordUsage(
+  const taskCost = await recordUsage(
     supabase,
     agent.org_id,
     agent.id,
@@ -698,6 +768,16 @@ export async function POST(request: NextRequest) {
     outputTokens,
     durationMs,
     "completed"
+  );
+
+  // Spike detection (runs after recording so the task is in the DB)
+  await checkSpikeDetection(
+    supabase,
+    agent.org_id,
+    agent.id,
+    agent.name,
+    taskCost,
+    guardrails
   );
 
   return NextResponse.json(responseBody);

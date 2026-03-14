@@ -208,9 +208,16 @@
   - [x] Unacknowledged rows highlighted
 - [x] Alert creation logic (budget warnings, exceeded, error spike, kill-switch — in proxy, Phase 3)
 - [x] Toast notifications for critical alerts (via Realtime + Sonner, with "View" action button)
-- [ ] Email notifications via Resend (requires external service setup)
+- [x] Email notifications via Resend:
+  - [x] `src/lib/email.ts` — Resend client with lazy init, HTML email templates
+  - [x] `POST /api/alerts/notify` — sends critical alert emails to org admins/owners
+  - [x] `POST /api/alerts/digest` — daily digest email (for cron job) with KPIs, alerts, top spender
+  - [x] `src/lib/alerts.ts` — `createAlert()` helper that inserts alert + fires email for critical alerts
+  - [x] Proxy updated to use `createAlert()` for all 5 alert insertion points
+  - [x] Graceful fallback when RESEND_API_KEY is not set (logs warning, skips email)
+  - Requires env vars: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `INTERNAL_API_SECRET`
 
-> **Phase 6 MOSTLY COMPLETE** — Only email notifications (Resend) remaining, requires external service config.
+> **Phase 6 COMPLETE**
 
 ---
 
@@ -227,9 +234,19 @@
 - [ ] Plan limit enforcement
 
 ### Prompt 20 — Landing Page
-- [ ] Public landing page at `/`
-- [ ] Hero, Problem, Analogy, Features, Pricing, CTA sections
-- [ ] Framer Motion animations
+- [x] Public landing page at `/`
+- [x] Sticky nav with scroll blur effect
+- [x] Hero section with gradient background, headline, CTAs, and dashboard mockup
+- [x] Problem section (runaway costs, resource conflicts, wasted spend)
+- [x] Analogy section (managing people vs managing AI agents — comparison table)
+- [x] Features section (Workforce Overview, Budget Control, ROI Tracking, Kill Switch)
+- [x] Social proof quote
+- [x] ROI example card (Lead Generator: 340 leads, $0.37/lead, 13,286% ROI)
+- [x] Pricing section (Free / Pro $49 / Enterprise $199)
+- [x] CTA section + footer
+- [x] Scroll-triggered fade-in animations (IntersectionObserver, no Framer Motion needed)
+- [x] Authenticated users redirected to /dashboard
+- [x] Dark mode, responsive design
 
 ### Prompt 21 — Onboarding Flow
 - [ ] 6-step guided onboarding after signup
