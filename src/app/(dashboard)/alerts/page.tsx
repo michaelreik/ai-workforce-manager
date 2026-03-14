@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,7 @@ import {
   Eye,
   CheckCheck,
 } from "lucide-react";
+import { useRealtime } from "@/hooks/use-realtime";
 import type { Alert, Agent } from "@/types/database";
 
 type AlertWithAgent = Alert & {
@@ -83,6 +84,7 @@ export default function AlertsPage() {
   const [page, setPage] = useState(0);
 
   const supabase = useMemo(() => createClient(), []);
+  const agentMapRef = useRef<Map<string, string>>(new Map());
 
   useEffect(() => {
     if (!currentOrg) return;
@@ -108,6 +110,7 @@ export default function AlertsPage() {
             a.name,
           ])
         );
+        agentMapRef.current = agentMap;
 
         const enriched: AlertWithAgent[] = (
           (alertsRes.data || []) as Alert[]
@@ -129,6 +132,39 @@ export default function AlertsPage() {
 
     fetchAlerts();
   }, [currentOrg, supabase]);
+
+  // Realtime: new alerts appear instantly
+  const handleRealtimeInsert = useCallback((record: Alert) => {
+    const enriched: AlertWithAgent = {
+      ...record,
+      agentName: record.agent_id
+        ? agentMapRef.current.get(record.agent_id) || null
+        : null,
+    };
+    setAlerts((prev) => [enriched, ...prev]);
+  }, []);
+
+  const handleRealtimeUpdate = useCallback((record: Alert) => {
+    setAlerts((prev) =>
+      prev.map((a) =>
+        a.id === record.id
+          ? {
+              ...a,
+              ...record,
+              agentName: a.agentName,
+            }
+          : a
+      )
+    );
+  }, []);
+
+  useRealtime<Alert>({
+    table: "alerts",
+    filter: currentOrg ? `org_id=eq.${currentOrg.id}` : undefined,
+    enabled: !!currentOrg,
+    onInsert: handleRealtimeInsert,
+    onUpdate: handleRealtimeUpdate,
+  });
 
   // Filtered alerts
   const filteredAlerts = useMemo(() => {

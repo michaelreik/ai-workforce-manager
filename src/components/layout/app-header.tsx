@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { Bell, LogOut, Settings, User } from "lucide-react";
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { Bell, LogOut, Settings, User, Circle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,11 +15,14 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTranslations } from "@/i18n/use-translations";
 import { useOrg } from "@/components/providers/org-provider";
+import { useRealtime } from "@/hooks/use-realtime";
 import { createClient } from "@/lib/supabase/client";
 import { logout } from "@/app/(auth)/actions";
 import Link from "next/link";
+import type { Alert, Agent } from "@/types/database";
 
 type HeaderStats = {
   dailySpent: number;
@@ -81,6 +84,72 @@ export function AppHeader() {
     fetchStats();
   }, [currentOrg, supabase]);
 
+  // Realtime: alert count updates
+  const handleAlertInsert = useCallback(() => {
+    setStats((prev) =>
+      prev
+        ? { ...prev, unacknowledgedAlerts: prev.unacknowledgedAlerts + 1 }
+        : prev
+    );
+  }, []);
+
+  const handleAlertUpdate = useCallback(
+    (record: Alert) => {
+      // If alert was just acknowledged, decrement count
+      if (record.acknowledged) {
+        setStats((prev) =>
+          prev
+            ? {
+                ...prev,
+                unacknowledgedAlerts: Math.max(
+                  0,
+                  prev.unacknowledgedAlerts - 1
+                ),
+              }
+            : prev
+        );
+      }
+    },
+    []
+  );
+
+  const { status: alertRealtimeStatus } = useRealtime<Alert>({
+    table: "alerts",
+    filter: currentOrg ? `org_id=eq.${currentOrg.id}` : undefined,
+    enabled: !!currentOrg,
+    onInsert: handleAlertInsert,
+    onUpdate: handleAlertUpdate,
+  });
+
+  // Realtime: agent status changes
+  const handleAgentUpdate = useCallback(
+    (record: Agent) => {
+      // Re-fetch agent count on status change
+      if (!currentOrg) return;
+      supabase
+        .from("agents")
+        .select("id")
+        .eq("org_id", currentOrg.id)
+        .eq("status", "active")
+        .then(({ data }) => {
+          setStats((prev) =>
+            prev ? { ...prev, activeAgents: data?.length || 0 } : prev
+          );
+        });
+    },
+    [currentOrg, supabase]
+  );
+
+  const { status: agentRealtimeStatus } = useRealtime<Agent>({
+    table: "agents",
+    filter: currentOrg ? `org_id=eq.${currentOrg.id}` : undefined,
+    enabled: !!currentOrg,
+    onUpdate: handleAgentUpdate,
+  });
+
+  const isRealtimeConnected =
+    alertRealtimeStatus === "connected" || agentRealtimeStatus === "connected";
+
   const orgInitials = currentOrg?.name
     ? currentOrg.name
         .split(" ")
@@ -97,13 +166,34 @@ export function AppHeader() {
 
       {/* Org name & stats */}
       <div className="flex items-center gap-6 flex-1">
-        {orgLoading ? (
-          <Skeleton className="h-4 w-28" />
-        ) : (
-          <span className="font-semibold text-sm">
-            {currentOrg?.name || t("noOrg")}
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {orgLoading ? (
+            <Skeleton className="h-4 w-28" />
+          ) : (
+            <span className="font-semibold text-sm">
+              {currentOrg?.name || t("noOrg")}
+            </span>
+          )}
+          {/* Live indicator */}
+          {!orgLoading && stats && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Circle
+                    className={`h-2 w-2 shrink-0 ${
+                      isRealtimeConnected
+                        ? "fill-emerald-500 text-emerald-500"
+                        : "fill-muted-foreground text-muted-foreground"
+                    }`}
+                  />
+                }
+              />
+              <TooltipContent>
+                {isRealtimeConnected ? t("liveConnected") : t("liveDisconnected")}
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
 
         <div className="hidden md:flex items-center gap-4 text-sm text-muted-foreground">
           {stats ? (

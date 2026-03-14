@@ -26,6 +26,8 @@
     "activeAgents": "Active Agents",
     "alerts": "Alerts",
     "noOrg": "No Organization",
+    "liveConnected": "Live — realtime updates active",
+    "liveDisconnected": "Reconnecting...",
     "profile": "Profile",
     "orgSettings": "Organization Settings",
     "logout": "Log Out"

@@ -176,10 +176,19 @@
 ## Phase 6 — Realtime & Alerts (Tag 15–16)
 
 ### Prompt 16 — Realtime Updates
-- [ ] Supabase Realtime subscriptions
-- [ ] Live status badges, budget numbers, alert counts
-- [ ] `useRealtimeSubscription` hook
-- [ ] "Live" indicator + reconnection fallback
+- [x] `useRealtime` hook (`src/hooks/use-realtime.ts`)
+  - [x] Generic hook for subscribing to any table's postgres_changes
+  - [x] Supports INSERT, UPDATE, DELETE, or * events
+  - [x] Optional filter (e.g. `org_id=eq.xxx`)
+  - [x] Returns connection status (connecting/connected/disconnected)
+  - [x] Stable callback refs to avoid re-subscriptions
+  - [x] Automatic cleanup on unmount
+- [x] Header: live alert count (increments on new alerts, decrements on acknowledge)
+- [x] Header: live active agent count (re-fetches on agent status change)
+- [x] Alerts page: new alerts appear in real-time without refresh
+- [x] Alerts page: status updates reflected in real-time
+- [x] "Live" indicator (green dot next to org name, tooltip shows connection status)
+- [ ] Reconnection fallback with polling (currently relies on Supabase auto-reconnect)
 
 ### Prompt 17 — Alert System
 - [ ] Alert bell dropdown in header (currently just links to /alerts)
