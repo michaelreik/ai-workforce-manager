@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -312,10 +311,8 @@ export function AppHeader() {
 
       {/* Alerts bell dropdown */}
       <DropdownMenu>
-        <DropdownMenuTrigger className="relative cursor-pointer">
-          <Button variant="ghost" size="icon">
-            <Bell className="h-4 w-4" />
-          </Button>
+        <DropdownMenuTrigger className="relative cursor-pointer inline-flex items-center justify-center rounded-md h-9 w-9 hover:bg-accent hover:text-accent-foreground">
+          <Bell className="h-4 w-4" />
           {stats && stats.unacknowledgedAlerts > 0 && (
             <Badge
               variant="destructive"
@@ -363,18 +360,21 @@ export function AppHeader() {
                       {formatTimeShort(alert.created_at)}
                     </p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="xs"
-                    className="shrink-0 h-6 w-6 p-0"
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    className="shrink-0 h-6 w-6 p-0 inline-flex items-center justify-center rounded-md hover:bg-accent cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAcknowledge(alert.id);
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAcknowledge(alert.id);
+                    }}
                     title={t("acknowledge")}
                   >
                     <CheckCheck className="h-3 w-3" />
-                  </Button>
+                  </span>
                 </DropdownMenuItem>
               );
             })
