@@ -87,21 +87,28 @@
 ## Phase 3 — API Proxy Layer (Tag 6–8)
 
 ### Prompt 7 — Proxy API Route
-- [ ] `/api/v1/chat/completions` OpenAI-compatible proxy
-- [ ] API key authentication
-- [ ] Budget checks before forwarding
-- [ ] Guardrail enforcement
-- [ ] Token usage tracking + cost calculation
-- [ ] Model fallback on failure
+- [x] `/api/v1/chat/completions` OpenAI-compatible proxy
+- [x] API key authentication (SHA-256 hash lookup)
+- [x] Budget checks before forwarding (daily + monthly)
+- [x] Guardrail enforcement (token limits, budget limits)
+- [x] Token usage tracking + cost calculation (model pricing table)
+- [x] Model fallback on failure
+- [x] Anthropic-to-OpenAI response format conversion
+- [x] Budget threshold alerts (80% warning, 100% exceeded)
+- [x] Auto-pause on budget exceeded (if guardrail enabled)
 
 ### Prompt 8 — API Key Management
-- [ ] `/settings/api-keys` page
-- [ ] Create/delete/rotate API keys
-- [ ] SHA-256 hashing, show key only once
+- [x] `/settings/api-keys` page
+- [x] Create/delete API keys
+- [x] SHA-256 hashing, show key only once (reveal modal)
+- [x] Scope to specific agent or all agents
+- [x] Expiration options (never, 30d, 90d, 1y)
 
 ### Prompt 9 — Integration Guide
-- [ ] `/settings/integration` page with code snippets
-- [ ] Tabs: OpenAI Python, OpenAI TS, Anthropic, cURL, LangChain
+- [x] `/settings/integration` page with code snippets
+- [x] Tabs: OpenAI Python, OpenAI TS, Anthropic, cURL, LangChain
+- [x] Copy button on each snippet
+- [x] Test Connection button
 - [ ] Test Connection button
 
 ---
@@ -109,9 +116,11 @@
 ## Phase 4 — Budget & Token Control (Tag 9–11)
 
 ### Prompt 10 — Budget Overview
-- [ ] `/budget` page with summary cards
-- [ ] Team budget cards
-- [ ] Budget timeline chart (daily cumulative vs budget line)
+- [x] `/budget` page with summary cards (total monthly, total spent, remaining + days left, projected month-end)
+- [x] Team budget cards (budget bar, agent count, top spender per team, unallocated budget)
+- [x] Budget timeline chart (30-day cumulative spend area chart with budget limit reference line, Recharts)
+- [x] Skeleton loading states
+- [x] i18n support with interpolation (en + de)
 
 ### Prompt 11 — Budget Allocation
 - [ ] `/budget/allocate` page
