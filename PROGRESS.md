@@ -280,3 +280,5 @@
   - [x] Progress bar + clickable checklist items linking to relevant pages
   - [x] Auto-dismisses when all steps complete
   - [x] Dismissible via X button (persists in localStorage)
+
+> **Phase 7 MOSTLY COMPLETE** — Only Stripe integration (Prompt 19) remaining.
