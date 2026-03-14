@@ -28,6 +28,11 @@
     "noOrg": "No Organization",
     "liveConnected": "Live — realtime updates active",
     "liveDisconnected": "Reconnecting...",
+    "unread": "unread",
+    "noNewAlerts": "No new alerts",
+    "viewAllAlerts": "View All Alerts",
+    "viewAlert": "View",
+    "acknowledge": "Acknowledge",
     "profile": "Profile",
     "orgSettings": "Organization Settings",
     "logout": "Log Out"

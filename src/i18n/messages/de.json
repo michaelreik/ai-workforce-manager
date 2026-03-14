@@ -28,6 +28,11 @@
     "noOrg": "Keine Organisation",
     "liveConnected": "Live — Echtzeit-Updates aktiv",
     "liveDisconnected": "Verbindung wird wiederhergestellt...",
+    "unread": "ungelesen",
+    "noNewAlerts": "Keine neuen Alarme",
+    "viewAllAlerts": "Alle Alarme anzeigen",
+    "viewAlert": "Anzeigen",
+    "acknowledge": "Bestätigen",
     "profile": "Profil",
     "orgSettings": "Organisationseinstellungen",
     "logout": "Abmelden"

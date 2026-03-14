@@ -141,9 +141,9 @@
   - [x] Link to agent detail page
 - [x] Guardrail enforcement in proxy (budget checks, auto-pause on exceeded — done in Phase 3)
 - [x] "Emergency: Pause All Agents" button (with confirmation, audit log entry)
-- [ ] Spike detection (cost > 3x rolling average → auto-pause + alert)
+- [x] Spike detection (cost > 3x rolling average → auto-pause + alert + audit log)
 
-> **Phase 4 MOSTLY COMPLETE** — Only spike detection remaining.
+> **Phase 4 COMPLETE**
 
 ---
 
@@ -191,7 +191,12 @@
 - [ ] Reconnection fallback with polling (currently relies on Supabase auto-reconnect)
 
 ### Prompt 17 — Alert System
-- [ ] Alert bell dropdown in header (currently just links to /alerts)
+- [x] Alert bell dropdown in header:
+  - [x] Shows latest 8 unacknowledged alerts with severity icons and relative time
+  - [x] Acknowledge button per alert directly from dropdown
+  - [x] Unread count badge (caps at 99+)
+  - [x] Empty state when no alerts
+  - [x] "View All Alerts" link to /alerts page
 - [x] `/alerts` page with full functionality:
   - [x] Summary cards (total, unacknowledged, critical, resolved) — clickable as quick filters
   - [x] Filterable by severity (all/critical/warning/info) and status (all/unacknowledged/acknowledged/resolved)
@@ -202,8 +207,10 @@
   - [x] Empty state with helpful description
   - [x] Unacknowledged rows highlighted
 - [x] Alert creation logic (budget warnings, exceeded, error spike, kill-switch — in proxy, Phase 3)
-- [ ] Email notifications via Resend
-- [ ] Toast notifications for critical alerts via Realtime
+- [x] Toast notifications for critical alerts (via Realtime + Sonner, with "View" action button)
+- [ ] Email notifications via Resend (requires external service setup)
+
+> **Phase 6 MOSTLY COMPLETE** — Only email notifications (Resend) remaining, requires external service config.
 
 ---
 
