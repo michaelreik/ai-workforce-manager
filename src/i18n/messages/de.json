@@ -54,6 +54,7 @@
   },
   "agents": {
     "title": "Agenten",
+    "subtitle": "Verwalten und überwachen Sie Ihre KI-Agenten",
     "addAgent": "Agent hinzufügen",
     "status": {
       "active": "Aktiv",
@@ -68,7 +69,21 @@
     "overview": "Übersicht",
     "taskHistory": "Aufgabenverlauf",
     "guardrails": "Leitplanken",
-    "auditLog": "Prüfprotokoll"
+    "auditLog": "Prüfprotokoll",
+    "budgetUsed": "Budget verbraucht",
+    "tasksToday": "Aufgaben heute",
+    "costToday": "Kosten heute",
+    "filterStatus": "Status",
+    "filterTeam": "Team",
+    "filterModel": "Modell",
+    "allStatuses": "Alle Status",
+    "allTeams": "Alle Teams",
+    "allModels": "Alle Modelle",
+    "noAgents": "Keine Agenten gefunden",
+    "noAgentsFiltered": "Passen Sie Ihre Suche oder Filter an",
+    "noAgentsYet": "Erstellen Sie Ihren ersten Agenten",
+    "agentPaused": "Agent pausiert",
+    "agentResumed": "Agent fortgesetzt"
   },
   "budget": {
     "title": "Budget",

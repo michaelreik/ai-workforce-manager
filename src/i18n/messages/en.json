@@ -54,6 +54,7 @@
   },
   "agents": {
     "title": "Agents",
+    "subtitle": "Manage and monitor your AI agents",
     "addAgent": "Add Agent",
     "status": {
       "active": "Active",
@@ -68,7 +69,21 @@
     "overview": "Overview",
     "taskHistory": "Task History",
     "guardrails": "Guardrails",
-    "auditLog": "Audit Log"
+    "auditLog": "Audit Log",
+    "budgetUsed": "Budget used",
+    "tasksToday": "Tasks today",
+    "costToday": "Cost today",
+    "filterStatus": "Status",
+    "filterTeam": "Team",
+    "filterModel": "Model",
+    "allStatuses": "All Statuses",
+    "allTeams": "All Teams",
+    "allModels": "All Models",
+    "noAgents": "No agents found",
+    "noAgentsFiltered": "Try adjusting your search or filters",
+    "noAgentsYet": "Create your first agent to get started",
+    "agentPaused": "Agent paused",
+    "agentResumed": "Agent resumed"
   },
   "budget": {
     "title": "Budget",

@@ -53,10 +53,10 @@
 ## Phase 2 — Agent Management (Tag 3–5)
 
 ### Prompt 4 — Agent Overview Page
-- [ ] `/agents` page with responsive card grid
-- [ ] Agent cards (name, status badge, team, model, budget bar, stats)
-- [ ] Search bar + filters (status, team, model)
-- [ ] "Add Agent" button
+- [x] `/agents` page with responsive card grid
+- [x] Agent cards (name, status badge, team, model, budget bar, stats)
+- [x] Search bar + filters (status, team, model)
+- [x] "Add Agent" button
 
 ### Prompt 5 — Agent Detail Page
 - [ ] `/agents/[id]` with tabs (Overview, Task History, Guardrails, Audit Log)
