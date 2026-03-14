@@ -224,9 +224,25 @@
 ## Phase 7 — Polish, Payments & Landing Page (Tag 17–20)
 
 ### Prompt 18 — Organization Settings
-- [ ] `/settings` tabs: General, Members, Billing, Notifications
-- [ ] Invite members, change roles
-- [ ] Provider API key management
+- [x] `/settings` page with tabbed layout (General, Members, Billing, Notifications)
+- [x] General tab:
+  - [x] Editable org name and slug
+  - [x] Current plan badge with plan description
+  - [x] Quick links to API Keys and Integration sub-pages
+  - [x] Danger zone with delete organization (contact support)
+- [x] Members tab:
+  - [x] Invite member form (email + role selector)
+  - [x] Members table with role, joined date
+  - [x] Inline role change (dropdown: Viewer, Manager, Admin)
+  - [x] Remove member with confirmation
+  - [x] Role permissions reference card (Owner, Admin, Manager, Viewer)
+- [x] Billing tab:
+  - [x] Current plan display with feature limits (agents, requests, teams)
+  - [x] Upgrade button (disabled, Stripe coming soon)
+- [x] Notifications tab:
+  - [x] Toggle switches for: Critical alerts, Warning alerts, Info alerts, Daily digest
+  - [x] Save preferences button
+- [x] Full i18n (en + de)
 
 ### Prompt 19 — Stripe Integration
 - [ ] Stripe Checkout for plan upgrades
