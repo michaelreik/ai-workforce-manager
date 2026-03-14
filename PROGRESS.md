@@ -29,7 +29,7 @@
   - [x] Listens to auth state changes (re-fetches on sign-in, clears on sign-out)
 - [x] Middleware redirects unauthenticated users to /login
 - [x] RLS policies on all tables scoped to org_id via `user_org_ids()`
-- [ ] Organization switcher in sidebar (for users in multiple orgs)
+- [x] Organization switcher in sidebar (dropdown, only shows when user has multiple orgs)
 
 ### Prompt 3 — Seed Data
 - [x] Seed script with demo data
@@ -50,7 +50,7 @@
 - [x] Git repo connected & pushed
 - [x] Demo data for development
 
-> **Phase 1 COMPLETE** — Only the org switcher (Prompt 2) is deferred to later.
+> **Phase 1 COMPLETE**
 
 ### Dashboard Page (wired up)
 - [x] KPI cards with live Supabase data (daily spend, active agents, monthly budget, alerts)
@@ -188,7 +188,7 @@
 - [x] Alerts page: new alerts appear in real-time without refresh
 - [x] Alerts page: status updates reflected in real-time
 - [x] "Live" indicator (green dot next to org name, tooltip shows connection status)
-- [ ] Reconnection fallback with polling (currently relies on Supabase auto-reconnect)
+- [x] Reconnection fallback with polling (30s interval via `onPollFallback` callback when disconnected)
 
 ### Prompt 17 — Alert System
 - [x] Alert bell dropdown in header:

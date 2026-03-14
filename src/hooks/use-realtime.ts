@@ -14,6 +14,8 @@ type UseRealtimeOptions<T> = {
   onUpdate?: (record: T) => void;
   onDelete?: (old: T) => void;
   enabled?: boolean;
+  /** Callback for polling fallback when realtime disconnects. Called every 30s. */
+  onPollFallback?: () => void;
 };
 
 type RealtimeStatus = "connecting" | "connected" | "disconnected";
@@ -33,19 +35,23 @@ export function useRealtime<T = Record<string, unknown>>(
     onUpdate,
     onDelete,
     enabled = true,
+    onPollFallback,
   } = options;
 
   const [status, setStatus] = useState<RealtimeStatus>("disconnected");
   const channelRef = useRef<RealtimeChannel | null>(null);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const supabase = useMemo(() => createClient(), []);
 
   // Stable refs for callbacks so we don't re-subscribe on every render
   const onInsertRef = useRef(onInsert);
   const onUpdateRef = useRef(onUpdate);
   const onDeleteRef = useRef(onDelete);
+  const onPollFallbackRef = useRef(onPollFallback);
   onInsertRef.current = onInsert;
   onUpdateRef.current = onUpdate;
   onDeleteRef.current = onDelete;
+  onPollFallbackRef.current = onPollFallback;
 
   useEffect(() => {
     if (!enabled) {
@@ -91,11 +97,25 @@ export function useRealtime<T = Record<string, unknown>>(
           }
         }
       )
-      .subscribe((status: string) => {
-        if (status === "SUBSCRIBED") {
+      .subscribe((subscriptionStatus: string) => {
+        if (subscriptionStatus === "SUBSCRIBED") {
           setStatus("connected");
-        } else if (status === "CLOSED" || status === "CHANNEL_ERROR") {
+          // Stop polling when connected
+          if (pollIntervalRef.current) {
+            clearInterval(pollIntervalRef.current);
+            pollIntervalRef.current = null;
+          }
+        } else if (
+          subscriptionStatus === "CLOSED" ||
+          subscriptionStatus === "CHANNEL_ERROR"
+        ) {
           setStatus("disconnected");
+          // Start polling fallback when disconnected
+          if (!pollIntervalRef.current && onPollFallbackRef.current) {
+            pollIntervalRef.current = setInterval(() => {
+              onPollFallbackRef.current?.();
+            }, 30_000);
+          }
         }
       });
 
@@ -104,6 +124,10 @@ export function useRealtime<T = Record<string, unknown>>(
     return () => {
       supabase.removeChannel(channel);
       channelRef.current = null;
+      if (pollIntervalRef.current) {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+      }
       setStatus("disconnected");
     };
   }, [table, event, filter, enabled, supabase]);
@@ -112,8 +136,12 @@ export function useRealtime<T = Record<string, unknown>>(
     if (channelRef.current) {
       supabase.removeChannel(channelRef.current);
       channelRef.current = null;
-      setStatus("disconnected");
     }
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+    setStatus("disconnected");
   }, [supabase]);
 
   return { status, unsubscribe };

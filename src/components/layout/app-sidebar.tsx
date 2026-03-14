@@ -9,6 +9,9 @@ import {
   BarChart3,
   Bell,
   Settings,
+  ChevronsUpDown,
+  Check,
+  Building2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,7 +25,14 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useTranslations } from "@/i18n/use-translations";
+import { useOrg } from "@/components/providers/org-provider";
 
 const navItems = [
   { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -36,18 +46,47 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { t } = useTranslations("nav");
+  const { currentOrg, orgs, setCurrentOrg } = useOrg();
+
+  const showOrgSwitcher = orgs.length > 1;
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b border-border px-4 py-3">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-            AI
-          </div>
-          <span className="font-semibold text-sm group-data-[collapsible=icon]:hidden">
-            OpenManage AI
-          </span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
+              AI
+            </div>
+            <span className="font-semibold text-sm truncate group-data-[collapsible=icon]:hidden">
+              {currentOrg?.name || "OpenManage AI"}
+            </span>
+          </Link>
+          {showOrgSwitcher && (
+            <div className="group-data-[collapsible=icon]:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex h-7 w-7 items-center justify-center rounded-md hover:bg-muted transition-colors">
+                  <ChevronsUpDown className="h-3.5 w-3.5 text-muted-foreground" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="bottom" align="start" className="w-56">
+                  {orgs.map((org) => (
+                    <DropdownMenuItem
+                      key={org.id}
+                      onClick={() => setCurrentOrg(org)}
+                      className="flex items-center gap-2"
+                    >
+                      <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span className="flex-1 truncate">{org.name}</span>
+                      {org.id === currentOrg?.id && (
+                        <Check className="h-3.5 w-3.5 text-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+        </div>
       </SidebarHeader>
 
       <SidebarContent>
