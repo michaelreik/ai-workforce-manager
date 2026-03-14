@@ -82,6 +82,8 @@
 - [x] Guardrail presets (Conservative, Standard, Aggressive, Custom)
 - [x] Creates agent with guardrails on save
 
+> **Phase 2 COMPLETE**
+
 ---
 
 ## Phase 3 — API Proxy Layer (Tag 6–8)
@@ -109,7 +111,8 @@
 - [x] Tabs: OpenAI Python, OpenAI TS, Anthropic, cURL, LangChain
 - [x] Copy button on each snippet
 - [x] Test Connection button
-- [ ] Test Connection button
+
+> **Phase 3 COMPLETE**
 
 ---
 
@@ -128,28 +131,36 @@
 - [ ] Real-time unallocated budget calculation
 
 ### Prompt 12 — Kill Switch & Controls
-- [x] Quick Controls section on dashboard (live at-risk agents: >90% budget + error state)
+- [x] Quick Controls section on dashboard (live at-risk agents: >90% budget or error state)
   - [x] Pause/Resume buttons per agent
   - [x] Link to agent detail page
+- [x] Guardrail enforcement in proxy (budget checks, auto-pause on exceeded — done in Phase 3)
 - [ ] "Emergency: Pause All Agents" button
-- [ ] Guardrail enforcement function (spike detection, auto-pause)
+- [ ] Spike detection (cost > 3x rolling average → auto-pause + alert)
 
 ---
 
 ## Phase 5 — Analytics & ROI (Tag 12–14)
 
 ### Prompt 13 — Analytics Dashboard
-- [ ] `/analytics` with cost overview, agent performance, model comparison
-- [ ] Charts with Recharts
-- [ ] Date range picker
+- [x] `/analytics` with tabbed layout (Cost, Performance, Models, ROI, Recommendations)
+- [x] Cost Overview: KPI cards (total, change, avg/task, most expensive), daily cost line chart with anomaly highlighting
+- [x] Agent Performance: horizontal bar chart + sortable table (tasks, success rate, avg cost, duration, cost/unit)
+- [x] Model Comparison: bar chart + stats table, savings insights for expensive models
+- [x] Date range picker (7d / 30d / 90d)
+- [x] All charts with Recharts
 
 ### Prompt 14 — ROI Calculator
-- [ ] Per-agent output value/unit configuration
-- [ ] ROI section on analytics page
+- [x] ROI section on analytics page (tab)
+- [x] Per-agent ROI cards: output units, cost, revenue value, cost/unit, ROI %
+- [x] Overall summary: total revenue, total cost, overall ROI
+- [x] Star performers highlight (top 3 by ROI)
+- [x] Reads output_value and output_unit_name from agent metadata
 
 ### Prompt 15 — Optimization Recommendations
-- [ ] Rule-based recommendations (model downgrade, cost increase, error rate, idle agents)
-- [ ] Actionable cards with "Take Action" buttons
+- [x] Rule-based recommendations (model downgrade, cost increase, error rate, team budget, idle agents)
+- [x] Actionable cards with severity icons, impact text, and "View Agent" / "View Budget" links
+- [x] Sorted by severity (critical → warning → info)
 
 ---
 
