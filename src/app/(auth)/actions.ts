@@ -65,7 +65,7 @@ export async function signup(formData: FormData) {
     });
   }
 
-  redirect("/dashboard");
+  redirect("/onboarding");
 }
 
 export async function logout() {

@@ -21,6 +21,7 @@ import {
   OctagonX,
 } from "lucide-react";
 import type { Agent, Team, BudgetEntry, Alert } from "@/types/database";
+import { OnboardingChecklist } from "@/components/onboarding/onboarding-checklist";
 
 type DashboardStats = {
   dailySpent: number;
@@ -285,6 +286,9 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">{t("welcome")}</p>
       </div>
+
+      {/* Onboarding checklist banner */}
+      <OnboardingChecklist />
 
       {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

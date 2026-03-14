@@ -265,6 +265,18 @@
 - [x] Dark mode, responsive design
 
 ### Prompt 21 — Onboarding Flow
-- [ ] 6-step guided onboarding after signup
-- [ ] Progress bar, skip button
-- [ ] Checklist banner on dashboard until complete
+- [x] 6-step guided onboarding at `/onboarding`:
+  - [x] Step 1: Name your organization (pre-filled, editable name + slug)
+  - [x] Step 2: Create your first team
+  - [x] Step 3: Add your first agent (name + model selector)
+  - [x] Step 4: Connect LLM provider (OpenAI/Anthropic key validation)
+  - [x] Step 5: Integration snippet (Python code example)
+  - [x] Step 6: "You're all set!" completion screen
+- [x] Visual progress bar with step icons and connector lines
+- [x] Skip button on every step + skip-all option
+- [x] Signup redirects to `/onboarding` instead of `/dashboard`
+- [x] Onboarding checklist banner on dashboard:
+  - [x] Checks actual data (teams, agents, API keys exist)
+  - [x] Progress bar + clickable checklist items linking to relevant pages
+  - [x] Auto-dismisses when all steps complete
+  - [x] Dismissible via X button (persists in localStorage)
