@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "@/i18n/use-translations";
 import { AgentCard, type AgentWithStats } from "@/components/agents/agent-card";
+import { AgentFormModal } from "@/components/agents/agent-form-modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Search, Bot } from "lucide-react";
 import { toast } from "sonner";
-import type { Agent, Team, BudgetEntry, Task } from "@/types/database";
+import type { Agent, Team, BudgetEntry, Task, Guardrails } from "@/types/database";
 
 type StatusFilter = "all" | "active" | "paused" | "error" | "stopped";
 type TeamFilter = string; // team id or "all"
@@ -33,6 +34,7 @@ export default function AgentsPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [teamFilter, setTeamFilter] = useState<TeamFilter>("all");
   const [modelFilter, setModelFilter] = useState<ModelFilter>("all");
+  const [formModalOpen, setFormModalOpen] = useState(false);
 
   const supabase = useMemo(() => createClient(), []);
 
@@ -167,6 +169,37 @@ export default function AgentsPage() {
     );
   }
 
+  async function handleCreateAgent(data: {
+    name: string;
+    description: string | null;
+    team_id: string | null;
+    model: string;
+    fallback_model: string | null;
+    tags: string[];
+    guardrails: Guardrails;
+  }) {
+    const { error } = await supabase.from("agents").insert({
+      name: data.name,
+      description: data.description,
+      team_id: data.team_id,
+      model: data.model,
+      fallback_model: data.fallback_model,
+      tags: data.tags,
+      guardrails: data.guardrails,
+      status: "active",
+      metadata: {},
+    });
+
+    if (error) {
+      toast.error("Failed to create agent");
+      return;
+    }
+
+    toast.success(t("agentCreated"));
+    setFormModalOpen(false);
+    loadAgents();
+  }
+
   // Get unique models for filter
   const uniqueModels = useMemo(
     () => [...new Set(agents.map((a) => a.model))].sort(),
@@ -207,7 +240,7 @@ export default function AgentsPage() {
             {t("subtitle")}
           </p>
         </div>
-        <Button size="sm">
+        <Button size="sm" onClick={() => setFormModalOpen(true)}>
           <Plus className="h-4 w-4" />
           {t("addAgent")}
         </Button>
@@ -297,6 +330,14 @@ export default function AgentsPage() {
           ))}
         </div>
       )}
+
+      {/* Add Agent Modal */}
+      <AgentFormModal
+        open={formModalOpen}
+        onOpenChange={setFormModalOpen}
+        teams={teams}
+        onSave={handleCreateAgent}
+      />
     </div>
   );
 }

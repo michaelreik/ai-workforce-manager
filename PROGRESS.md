@@ -12,7 +12,7 @@
 - [x] Supabase client with environment variables
 - [x] Dark-mode dashboard layout
   - [x] Collapsible sidebar (Dashboard, Agents, Budget, Analytics, Alerts, Settings)
-  - [x] Top header bar (org name, daily budget, active agent count, alerts bell with badge)
+  - [x] Top header bar (org name, daily budget, active agent count, alerts bell with badge — all live from Supabase)
   - [x] Main content area with breadcrumbs
   - [x] User avatar dropdown (Profile, Org Settings, Logout)
 - [x] i18n infrastructure (English + German, extensible)
@@ -23,6 +23,10 @@
 - [x] Signup page
 - [x] Auto-create organization on signup (name + slug)
 - [x] Organization context provider (React context)
+  - [x] Fetches user's orgs from Supabase on mount (org_members + organizations join)
+  - [x] Auto-selects org from localStorage or falls back to first org
+  - [x] Exposes orgs list, loading state, refreshOrgs(), and user role per org
+  - [x] Listens to auth state changes (re-fetches on sign-in, clears on sign-out)
 - [x] Middleware redirects unauthenticated users to /login
 - [x] RLS policies on all tables scoped to org_id via `user_org_ids()`
 - [ ] Organization switcher in sidebar (for users in multiple orgs)
@@ -48,6 +52,12 @@
 
 > **Phase 1 COMPLETE** — Only the org switcher (Prompt 2) is deferred to later.
 
+### Dashboard Page (wired up)
+- [x] KPI cards with live Supabase data (daily spend, active agents, monthly budget, alerts)
+- [x] Quick Controls section showing at-risk agents (>90% budget or error state)
+- [x] Pause/Resume per agent, link to agent detail
+- [x] Skeleton loading states
+
 ---
 
 ## Phase 2 — Agent Management (Tag 3–5)
@@ -67,10 +77,10 @@
 - [x] Action buttons (Pause/Resume, Kill Switch, Edit, Delete)
 
 ### Prompt 6 — Add/Edit Agent Modal
-- [ ] Modal dialog for agent CRUD
-- [ ] Zod form validation
-- [ ] Guardrail presets (Conservative, Standard, Aggressive, Custom)
-- [ ] Creates budget_entries on save
+- [x] Modal dialog for agent CRUD
+- [x] Form validation (name + model required)
+- [x] Guardrail presets (Conservative, Standard, Aggressive, Custom)
+- [x] Creates agent with guardrails on save
 
 ---
 
@@ -109,7 +119,9 @@
 - [ ] Real-time unallocated budget calculation
 
 ### Prompt 12 — Kill Switch & Controls
-- [ ] Quick Controls section on dashboard
+- [x] Quick Controls section on dashboard (live at-risk agents: >90% budget + error state)
+  - [x] Pause/Resume buttons per agent
+  - [x] Link to agent detail page
 - [ ] "Emergency: Pause All Agents" button
 - [ ] Guardrail enforcement function (spike detection, auto-pause)
 
