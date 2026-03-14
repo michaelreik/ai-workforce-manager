@@ -18,6 +18,7 @@ import {
   Pause,
   Play,
   Eye,
+  OctagonX,
 } from "lucide-react";
 import type { Agent, Team, BudgetEntry, Alert } from "@/types/database";
 
@@ -222,6 +223,40 @@ export default function DashboardPage() {
     );
   }
 
+  async function handlePauseAll() {
+    if (!currentOrg) return;
+    if (!confirm(t("pauseAllConfirm"))) return;
+
+    const { error } = await supabase
+      .from("agents")
+      .update({ status: "paused" })
+      .eq("org_id", currentOrg.id)
+      .eq("status", "active");
+
+    if (error) {
+      toast.error("Failed to pause agents");
+      return;
+    }
+
+    // Audit log
+    await supabase.from("audit_log").insert({
+      org_id: currentOrg.id,
+      action: "emergency_pause_all",
+      target_type: "agent",
+      details: { reason: "manual_emergency" },
+    });
+
+    setAtRiskAgents((prev) =>
+      prev.map((a) =>
+        a.status === "active" ? { ...a, status: "paused" as const } : a
+      )
+    );
+    if (stats) {
+      setStats({ ...stats, activeAgents: 0, pausedAgents: stats.pausedAgents + stats.activeAgents });
+    }
+    toast.success(t("allAgentsPaused"));
+  }
+
   if (orgLoading || loading) {
     return (
       <div className="space-y-6">
@@ -344,8 +379,18 @@ export default function DashboardPage() {
 
       {/* Quick Controls — At-Risk Agents */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">{t("quickControls")}</CardTitle>
+          {stats && stats.activeAgents > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handlePauseAll}
+            >
+              <OctagonX className="h-4 w-4" />
+              {t("pauseAll")}
+            </Button>
+          )}
         </CardHeader>
         <CardContent>
           {atRiskAgents.length === 0 ? (

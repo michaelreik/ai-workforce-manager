@@ -126,17 +126,24 @@
 - [x] i18n support with interpolation (en + de)
 
 ### Prompt 11 — Budget Allocation
-- [ ] `/budget/allocate` page
-- [ ] Editable team/agent budgets
-- [ ] Real-time unallocated budget calculation
+- [x] `/budget/allocate` page
+- [x] Editable team budgets (proportionally distributes to agents)
+- [x] Expandable teams → editable per-agent budgets
+- [x] Real-time org total / allocated / unallocated summary bar
+- [x] Over-allocated warning badge
+- [x] "changed" badge on modified agents
+- [x] Save → upserts budget_entries + updates team budget_monthly + audit log
+- [x] "Allocate Budget" button on budget overview page linking to allocate page
 
 ### Prompt 12 — Kill Switch & Controls
 - [x] Quick Controls section on dashboard (live at-risk agents: >90% budget or error state)
   - [x] Pause/Resume buttons per agent
   - [x] Link to agent detail page
 - [x] Guardrail enforcement in proxy (budget checks, auto-pause on exceeded — done in Phase 3)
-- [ ] "Emergency: Pause All Agents" button
+- [x] "Emergency: Pause All Agents" button (with confirmation, audit log entry)
 - [ ] Spike detection (cost > 3x rolling average → auto-pause + alert)
+
+> **Phase 4 MOSTLY COMPLETE** — Only spike detection remaining.
 
 ---
 
@@ -162,6 +169,8 @@
 - [x] Actionable cards with severity icons, impact text, and "View Agent" / "View Budget" links
 - [x] Sorted by severity (critical → warning → info)
 
+> **Phase 5 COMPLETE**
+
 ---
 
 ## Phase 6 — Realtime & Alerts (Tag 15–16)
@@ -173,11 +182,19 @@
 - [ ] "Live" indicator + reconnection fallback
 
 ### Prompt 17 — Alert System
-- [ ] Alert bell dropdown in header
-- [ ] `/alerts` page with filters + bulk actions
-- [ ] Alert creation logic (budget, errors, loops, kill-switch)
+- [ ] Alert bell dropdown in header (currently just links to /alerts)
+- [x] `/alerts` page with full functionality:
+  - [x] Summary cards (total, unacknowledged, critical, resolved) — clickable as quick filters
+  - [x] Filterable by severity (all/critical/warning/info) and status (all/unacknowledged/acknowledged/resolved)
+  - [x] Table with severity badge, type, message, agent link, relative time, status
+  - [x] Per-row actions: acknowledge, resolve, view agent
+  - [x] Bulk actions: select via checkboxes, acknowledge/resolve selected
+  - [x] Pagination (20 per page)
+  - [x] Empty state with helpful description
+  - [x] Unacknowledged rows highlighted
+- [x] Alert creation logic (budget warnings, exceeded, error spike, kill-switch — in proxy, Phase 3)
 - [ ] Email notifications via Resend
-- [ ] Toast notifications for critical alerts
+- [ ] Toast notifications for critical alerts via Realtime
 
 ---
 

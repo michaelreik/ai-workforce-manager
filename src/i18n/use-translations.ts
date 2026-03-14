@@ -31,9 +31,15 @@ export function useTranslations(namespace?: string) {
   const { messages, locale } = useContext(TranslationContext);
 
   const t = useCallback(
-    (key: string): string => {
+    (key: string, params?: Record<string, string | number>): string => {
       const fullKey = namespace ? `${namespace}.${key}` : key;
-      return getNestedValue(messages, fullKey);
+      let value = getNestedValue(messages, fullKey);
+      if (params) {
+        for (const [k, v] of Object.entries(params)) {
+          value = value.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+        }
+      }
+      return value;
     },
     [messages, namespace]
   );
