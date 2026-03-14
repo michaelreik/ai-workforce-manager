@@ -59,12 +59,12 @@
 - [x] "Add Agent" button
 
 ### Prompt 5 — Agent Detail Page
-- [ ] `/agents/[id]` with tabs (Overview, Task History, Guardrails, Audit Log)
-- [ ] Budget gauge, metrics row, cost chart
-- [ ] Task history table with pagination
-- [ ] Guardrails configuration form
-- [ ] Audit log timeline
-- [ ] Action buttons (Pause/Resume, Kill Switch, Edit, Delete)
+- [x] `/agents/[id]` with tabs (Overview, Task History, Guardrails, Audit Log)
+- [x] Budget gauge, metrics row, cost chart
+- [x] Task history table with pagination
+- [x] Guardrails configuration form
+- [x] Audit log timeline
+- [x] Action buttons (Pause/Resume, Kill Switch, Edit, Delete)
 
 ### Prompt 6 — Add/Edit Agent Modal
 - [ ] Modal dialog for agent CRUD
