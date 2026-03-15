@@ -156,22 +156,22 @@ export function AnalyticsModelComparison({
                 />
                 <XAxis
                   dataKey="model"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `$${v}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--popover))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-popover)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
-                    color: "hsl(var(--popover-foreground))",
+                    color: "var(--color-popover-foreground)",
                   }}
                   formatter={(value, name) => [
                     name === "cost" ? `$${value}` : value,
@@ -182,7 +182,7 @@ export function AnalyticsModelComparison({
                 <Bar
                   dataKey="cost"
                   name={t("totalCost")}
-                  fill="hsl(var(--primary))"
+                  fill="var(--color-primary)"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>

@@ -165,7 +165,7 @@ export function AnalyticsAgentPerformance({
                 />
                 <XAxis
                   type="number"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `$${v}`}
@@ -173,17 +173,17 @@ export function AnalyticsAgentPerformance({
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   width={120}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--popover))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-popover)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
-                    color: "hsl(var(--popover-foreground))",
+                    color: "var(--color-popover-foreground)",
                   }}
                   formatter={(value, name) => [
                     name === "cost" ? `$${value}` : value,
@@ -192,7 +192,7 @@ export function AnalyticsAgentPerformance({
                 />
                 <Bar
                   dataKey="cost"
-                  fill="hsl(var(--primary))"
+                  fill="var(--color-primary)"
                   radius={[0, 4, 4, 0]}
                 />
               </BarChart>

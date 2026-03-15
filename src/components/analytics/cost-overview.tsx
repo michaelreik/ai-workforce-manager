@@ -166,40 +166,40 @@ export function AnalyticsCostOverview({
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   interval={dateRange === "7d" ? 0 : dateRange === "30d" ? 4 : 13}
                 />
                 <YAxis
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 11 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `$${v}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--popover))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-popover)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
-                    color: "hsl(var(--popover-foreground))",
+                    color: "var(--color-popover-foreground)",
                   }}
                   formatter={(value) => [`$${Number(value).toFixed(4)}`, t("cost")]}
                 />
                 <ReferenceLine
                   y={avgDailyCost * 2}
-                  stroke="hsl(var(--destructive))"
+                  stroke="var(--color-destructive)"
                   strokeDasharray="3 3"
                   label={{
                     value: t("anomalyThreshold"),
-                    fill: "hsl(var(--destructive))",
+                    fill: "var(--color-destructive)",
                     fontSize: 10,
                   }}
                 />
                 <Line
                   type="monotone"
                   dataKey="cost"
-                  stroke="hsl(var(--primary))"
+                  stroke="var(--color-primary)"
                   strokeWidth={2}
                   dot={(props) => {
                     const { cx, cy, payload } = props;
@@ -212,8 +212,8 @@ export function AnalyticsCostOverview({
                         r={isAnomaly ? 5 : 2.5}
                         fill={
                           isAnomaly
-                            ? "hsl(var(--destructive))"
-                            : "hsl(var(--primary))"
+                            ? "var(--color-destructive)"
+                            : "var(--color-primary)"
                         }
                         stroke="none"
                       />

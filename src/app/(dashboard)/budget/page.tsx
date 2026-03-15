@@ -441,37 +441,37 @@ export default function BudgetPage() {
                   <linearGradient id="colorSpend" x1="0" y1="0" x2="0" y2="1">
                     <stop
                       offset="5%"
-                      stopColor="hsl(var(--primary))"
+                      stopColor="var(--color-primary)"
                       stopOpacity={0.3}
                     />
                     <stop
                       offset="95%"
-                      stopColor="hsl(var(--primary))"
+                      stopColor="var(--color-primary)"
                       stopOpacity={0}
                     />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="hsl(var(--border))"
+                  stroke="var(--color-border)"
                 />
                 <XAxis
                   dataKey="label"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
                   tickLine={false}
                   axisLine={false}
                   interval="preserveStartEnd"
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v: number) => `$${v}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-card)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
                     fontSize: "12px",
                   }}
@@ -484,12 +484,12 @@ export default function BudgetPage() {
                 {monthlyAllocated > 0 && (
                   <ReferenceLine
                     y={monthlyAllocated}
-                    stroke="hsl(var(--destructive))"
+                    stroke="var(--color-destructive)"
                     strokeDasharray="6 3"
                     label={{
                       value: t("budgetLimit"),
                       position: "insideTopRight",
-                      fill: "hsl(var(--destructive))",
+                      fill: "var(--color-destructive)",
                       fontSize: 11,
                     }}
                   />
@@ -497,7 +497,7 @@ export default function BudgetPage() {
                 <Area
                   type="monotone"
                   dataKey="cumulative"
-                  stroke="hsl(var(--primary))"
+                  stroke="var(--color-primary)"
                   strokeWidth={2}
                   fill="url(#colorSpend)"
                 />
