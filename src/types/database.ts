@@ -61,6 +61,7 @@ export type Guardrails = {
   max_budget_monthly: number | null;
   max_task_duration_seconds: number | null;
   max_tokens_per_request: number | null;
+  rate_limit_rpm: number | null;
   spike_detection: boolean;
   auto_pause_on_budget: boolean;
   auto_downgrade_model: boolean;

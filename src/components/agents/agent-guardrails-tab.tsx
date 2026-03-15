@@ -129,6 +129,34 @@ export function AgentGuardrailsTab({
         </CardContent>
       </Card>
 
+      {/* Rate Limiting */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            {t("guardrailRateLimiting")}
+            <HelpTooltip content={t("helpRateLimiting")} />
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2 max-w-xs">
+            <Label htmlFor="rate_limit_rpm">{t("guardrailRateLimitRpm")}</Label>
+            <Input
+              id="rate_limit_rpm"
+              type="number"
+              min="1"
+              placeholder={t("guardrailRateLimitPlaceholder")}
+              value={form.rate_limit_rpm ?? ""}
+              onChange={(e) =>
+                updateField(
+                  "rate_limit_rpm",
+                  e.target.value ? Number(e.target.value) : null
+                )
+              }
+            />
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Automation Toggles */}
       <Card>
         <CardHeader>

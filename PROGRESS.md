@@ -406,6 +406,17 @@
 - [x] Fallback char-based estimation (1 token ≈ 4 chars) if extraction fails
 - [x] `recordUsage()` + `checkSpikeDetection()` now run AFTER stream completes with actual token counts
 
+### Fix — Proxy Rate Limiting
+- [x] `src/lib/rate-limiter.ts` — In-memory sliding window rate limiter:
+  - [x] `checkRateLimit(key, limit, windowMs)` with periodic cleanup of expired entries
+  - [x] `getOrgRateLimit(plan)` — Free: 100 rpm, Pro: 500 rpm, Enterprise: 2000 rpm
+- [x] `rate_limit_rpm` added to `Guardrails` type
+- [x] Agent guardrails presets updated: Conservative=10, Standard=30, Aggressive=100, Custom=null (plan default)
+- [x] Guardrails tab: new "Rate Limiting" section with number input and help tooltip
+- [x] Proxy route: org-level + agent-level rate limit checks (fail fast, before budget checks)
+  - [x] Returns 429 with `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `Retry-After` headers
+- [x] i18n: rate limiting keys in EN + DE
+
 ### Security Fix — Provider API Key Encryption
 - [x] `src/lib/crypto.ts` — AES-256-GCM encrypt/decrypt with `ENCRYPTION_KEY` env var
 - [x] `POST /api/providers` route — encrypts API key server-side before DB insert
