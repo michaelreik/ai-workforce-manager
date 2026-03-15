@@ -14,6 +14,7 @@ import {
   ChevronsUpDown,
   Check,
   Building2,
+  Globe,
 } from "lucide-react";
 import {
   Sidebar,
@@ -43,6 +44,7 @@ const navItems = [
   { key: "budget", href: "/budget", icon: Wallet },
   { key: "analytics", href: "/analytics", icon: BarChart3 },
   { key: "alerts", href: "/alerts", icon: Bell },
+  { key: "workspace", href: "/workspace/analytics", icon: Globe },
   { key: "settings", href: "/settings", icon: Settings },
   { key: "help", href: "/docs", icon: HelpCircle },
 ] as const;

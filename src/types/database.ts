@@ -180,3 +180,98 @@ export type Provider = {
   created_at: string;
   updated_at: string;
 };
+
+// --- Workspace Analytics ---
+
+export type UsageSourceType = "proxy" | "api_sync" | "csv_import" | "manual";
+export type SyncStatus = "pending" | "syncing" | "success" | "error";
+
+export type UsageSource = {
+  id: string;
+  org_id: string;
+  name: string;
+  type: UsageSourceType;
+  provider: string;
+  product: string | null;
+  config: Record<string, unknown>;
+  last_sync_at: string | null;
+  sync_status: SyncStatus;
+  sync_error: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type WorkspaceMember = {
+  id: string;
+  org_id: string;
+  email: string;
+  name: string | null;
+  department: string | null;
+  team_id: string | null;
+  role: string | null;
+  scim_id: string | null;
+  is_active: boolean;
+  created_at: string;
+};
+
+export type MemberToolAssignment = {
+  id: string;
+  org_id: string;
+  member_id: string;
+  source_id: string;
+  seat_type: string | null;
+  monthly_cost: number;
+  assigned_at: string;
+};
+
+export type HumanUsage = {
+  id: string;
+  org_id: string;
+  source_id: string | null;
+  member_id: string | null;
+  date: string;
+  messages_count: number;
+  conversations_count: number;
+  tokens_used: number;
+  cost: number;
+  active_minutes: number;
+  models_used: string[];
+  task_categories: Record<string, number>;
+  tools_used: string[];
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
+export type SurveyStatus = "draft" | "active" | "closed";
+
+export type SurveyQuestion = {
+  id: string;
+  type: "rating" | "scale" | "single_choice" | "multi_choice" | "text" | "number";
+  text: string;
+  options?: string[];
+};
+
+export type Survey = {
+  id: string;
+  org_id: string;
+  title: string;
+  description: string | null;
+  questions: SurveyQuestion[];
+  status: SurveyStatus;
+  target: string;
+  is_anonymous: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  created_by: string | null;
+  created_at: string;
+};
+
+export type SurveyResponse = {
+  id: string;
+  org_id: string;
+  survey_id: string;
+  member_id: string | null;
+  answers: Record<string, unknown>;
+  submitted_at: string;
+};

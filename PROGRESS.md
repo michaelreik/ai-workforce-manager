@@ -544,3 +544,46 @@
 ### Fix — tsconfig Excluding Test Files
 - [x] Added `src/test`, `**/*.test.ts`, `**/*.test.tsx` to tsconfig `exclude`
 - [x] Fixes `Cannot find name 'vi'` build error from Vitest test helpers
+
+---
+
+## Workspace Analytics — Phase A
+
+### Database & Types
+- [x] Migration `00007_workspace_analytics.sql`:
+  - [x] `usage_sources` — AI tool data sources (proxy, API sync, CSV, manual)
+  - [x] `workspace_members` — all employees with AI tool access
+  - [x] `member_tool_assignments` — which tools each member has + seat costs
+  - [x] `human_usage` — aggregated daily usage per member per source
+  - [x] `workspace_assistants` — custom GPTs/bots tracking
+  - [x] `surveys` + `survey_responses` — customizable impact surveys
+  - [x] RLS policies, indexes, updated_at triggers for all tables
+- [x] TypeScript types: UsageSource, WorkspaceMember, MemberToolAssignment, HumanUsage, Survey, SurveyResponse, SurveyQuestion
+
+### Prompt A1 — Usage Sources Management
+- [x] `/workspace/sources` page:
+  - [x] Source cards with provider, product, connection type badge, sync status, seats, monthly cost
+  - [x] Add Source modal: provider selector, product selector, display name, connection method (API Sync / CSV / Manual), seats + cost per seat
+  - [x] Delete source with confirmation
+  - [x] Empty state with CTA
+
+### Prompt A2 — Workspace Members Directory
+- [x] `/workspace/members` page:
+  - [x] Summary cards: total members, active this month, total seat costs, adoption rate
+  - [x] Searchable members table: name, email, department, role, messages, status (active/inactive)
+  - [x] Add Member modal (name, email, department, role)
+  - [x] Delete member
+  - [x] Empty state with CTA
+
+### Prompt A3 — Workspace Analytics Dashboard
+- [x] `/workspace/analytics` page with tabs (Overview, People, Tools, Cost Analysis):
+  - [x] KPI cards: total AI spend, active users, active agents, adoption rate
+  - [x] Overview: spend by source (stacked bar chart), usage by team (horizontal bar chart)
+  - [x] People: power users ranked by messages
+  - [x] Tools: per-source usage list (users, messages)
+  - [x] Cost Analysis: agent API costs, human seat licenses, human API usage breakdown
+  - [x] Empty state when no sources configured
+
+### Navigation & i18n
+- [x] Sidebar: "Workspace" nav item (Globe icon) linking to `/workspace/analytics`
+- [x] Full i18n: `workspace` namespace (~80 keys) in EN + DE
