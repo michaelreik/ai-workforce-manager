@@ -158,16 +158,18 @@ export default function ProfilePage() {
 
       const { error } = await supabase
         .from("user_profiles")
-        .upsert({
-          user_id: user.id,
-          display_name: profile.display_name || null,
-          avatar_url: profile.avatar_url || null,
-          timezone: profile.timezone,
-          theme: profile.theme,
-          two_factor_enabled: profile.two_factor_enabled,
-          notification_prefs: profile.notification_prefs,
-        })
-        .eq("user_id", user.id);
+        .upsert(
+          {
+            user_id: user.id,
+            display_name: profile.display_name || null,
+            avatar_url: profile.avatar_url || null,
+            timezone: profile.timezone,
+            theme: profile.theme,
+            two_factor_enabled: profile.two_factor_enabled,
+            notification_prefs: profile.notification_prefs,
+          },
+          { onConflict: "user_id" }
+        );
 
       if (error) throw error;
 
