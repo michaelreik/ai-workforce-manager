@@ -49,7 +49,7 @@ export function AgentAuditLogTab({ logs }: { logs: AuditLog[] }) {
         return (
           <div key={log.id} className="relative flex gap-4 pb-6 last:pb-0">
             {/* Icon */}
-            <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background">
+            <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-card">
               <Icon className="h-4 w-4 text-muted-foreground" />
             </div>
 

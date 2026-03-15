@@ -704,13 +704,13 @@ export default function TeamDetailPage() {
                     </defs>
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke="hsl(var(--border))"
+                      stroke="var(--color-border)"
                     />
                     <XAxis
                       dataKey="label"
                       tick={{
                         fontSize: 11,
-                        fill: "hsl(var(--muted-foreground))",
+                        fill: "var(--color-muted-foreground)",
                       }}
                       tickLine={false}
                       axisLine={false}
@@ -719,7 +719,7 @@ export default function TeamDetailPage() {
                     <YAxis
                       tick={{
                         fontSize: 11,
-                        fill: "hsl(var(--muted-foreground))",
+                        fill: "var(--color-muted-foreground)",
                       }}
                       tickLine={false}
                       axisLine={false}
@@ -727,8 +727,8 @@ export default function TeamDetailPage() {
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--border))",
+                        backgroundColor: "var(--color-card)",
+                        border: "1px solid var(--color-border)",
                         borderRadius: "8px",
                         fontSize: "12px",
                       }}
@@ -741,12 +741,12 @@ export default function TeamDetailPage() {
                     {Number(team.budget_monthly) > 0 && (
                       <ReferenceLine
                         y={Number(team.budget_monthly)}
-                        stroke="hsl(var(--destructive))"
+                        stroke="var(--color-destructive)"
                         strokeDasharray="6 3"
                         label={{
                           value: t("budgetLimit"),
                           position: "insideTopRight",
-                          fill: "hsl(var(--destructive))",
+                          fill: "var(--color-destructive)",
                           fontSize: 11,
                         }}
                       />

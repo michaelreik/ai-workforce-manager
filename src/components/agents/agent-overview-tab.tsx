@@ -227,32 +227,32 @@ export function AgentOverviewTab({
                 <XAxis
                   dataKey="date"
                   className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis
                   className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                  tick={{ fill: "var(--color-muted-foreground)", fontSize: 12 }}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(v) => `$${v}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "hsl(var(--popover))",
-                    border: "1px solid hsl(var(--border))",
+                    backgroundColor: "var(--color-popover)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "8px",
-                    color: "hsl(var(--popover-foreground))",
+                    color: "var(--color-popover-foreground)",
                   }}
                   formatter={(value) => [`$${Number(value).toFixed(4)}`, "Cost"]}
                 />
                 <Line
                   type="monotone"
                   dataKey="cost"
-                  stroke="hsl(var(--primary))"
+                  stroke="var(--color-primary)"
                   strokeWidth={2}
-                  dot={{ fill: "hsl(var(--primary))", r: 3 }}
+                  dot={{ fill: "var(--color-primary)", r: 3 }}
                   activeDot={{ r: 5 }}
                 />
               </LineChart>
