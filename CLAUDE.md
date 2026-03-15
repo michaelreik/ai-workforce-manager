@@ -40,6 +40,18 @@ Management layer for AI agents — budget control, performance tracking, guardra
 - `src/types/` — TypeScript types
 - `supabase/migrations/` — SQL migration files
 
+### Security
+- Provider API keys are encrypted with AES-256-GCM before storing in DB (`src/lib/crypto.ts`)
+- `decrypt()` handles un-encrypted strings (migration period fallback)
+- Requires `ENCRYPTION_KEY` env var (generate with: `openssl rand -hex 32`)
+
+## Required Environment Variables
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`
+- `ENCRYPTION_KEY` — AES-256 key for provider API key encryption (generate: `openssl rand -hex 32`)
+- `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PRO_PRICE_ID` / `STRIPE_ENTERPRISE_PRICE_ID`
+- `RESEND_API_KEY` (optional) / `INTERNAL_API_SECRET` (optional)
+- `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` (optional fallback, prefer DB providers)
+
 ## Commands
 - `npm run dev` — Start dev server
 - `npm run build` — Production build

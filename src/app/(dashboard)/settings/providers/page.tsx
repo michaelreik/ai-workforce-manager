@@ -163,31 +163,37 @@ export default function ProvidersPage() {
 
     const isFirstProvider = providers.length === 0;
 
-    const { data, error } = await supabase
-      .from("providers")
-      .insert({
-        org_id: currentOrg.id,
-        provider_type: formType,
-        display_name: formName,
-        api_key_encrypted: formKey, // In production, encrypt before storing
-        base_url: formBaseUrl || null,
-        rate_limit_rpm: formRpm ? parseInt(formRpm) : null,
-        is_default: isFirstProvider,
-        health_status: formTestResult?.status || "unknown",
-        last_health_check: formTestResult
-          ? new Date().toISOString()
-          : null,
-      })
-      .select()
-      .single();
+    try {
+      // Use API route to encrypt API key server-side
+      const res = await fetch("/api/providers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          org_id: currentOrg.id,
+          provider_type: formType,
+          display_name: formName,
+          api_key: formKey, // Raw key — encrypted server-side
+          base_url: formBaseUrl || null,
+          rate_limit_rpm: formRpm ? parseInt(formRpm) : null,
+          is_default: isFirstProvider,
+          health_status: formTestResult?.status || "unknown",
+          last_health_check: formTestResult
+            ? new Date().toISOString()
+            : null,
+        }),
+      });
 
-    if (error) {
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error || t("saveFailed"));
+      } else {
+        setProviders((prev) => [...prev, data as Provider]);
+        toast.success(t("providerAdded"));
+        setShowAddModal(false);
+        resetForm();
+      }
+    } catch {
       toast.error(t("saveFailed"));
-    } else {
-      setProviders((prev) => [...prev, data as Provider]);
-      toast.success(t("providerAdded"));
-      setShowAddModal(false);
-      resetForm();
     }
     setSaving(false);
   }

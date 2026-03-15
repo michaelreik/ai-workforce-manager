@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/service";
 import { calculateCost, getProvider, MODEL_PRICING } from "@/lib/pricing";
 import { createAlert } from "@/lib/alerts";
 import { getPlanLimits, type PlanId } from "@/lib/stripe";
+import { checkRateLimit, getOrgRateLimit } from "@/lib/rate-limiter";
+import { decrypt } from "@/lib/crypto";
 import crypto from "crypto";
 import type { Agent, BudgetEntry, Guardrails } from "@/types/database";
 
@@ -507,15 +509,67 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 5. Check plan request limits
+  // 5. Rate limit checks (cheap, fail fast)
   const { data: org } = await supabase
     .from("organizations")
     .select("plan")
     .eq("id", agent.org_id)
     .single();
 
+  // 5a. Org-level rate limit
+  const orgPlan = org?.plan || "free";
+  const orgRpm = getOrgRateLimit(orgPlan);
+  const orgCheck = checkRateLimit(`org:${apiKey.org_id}`, orgRpm, 60_000);
+  if (!orgCheck.allowed) {
+    return NextResponse.json(
+      {
+        error: {
+          message: `Organization rate limit exceeded (${orgRpm} req/min). Retry after ${Math.ceil(orgCheck.resetMs / 1000)}s.`,
+          type: "rate_limit",
+        },
+      },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": String(orgRpm),
+          "X-RateLimit-Remaining": "0",
+          "Retry-After": String(Math.ceil(orgCheck.resetMs / 1000)),
+        },
+      }
+    );
+  }
+
+  // 5b. Agent-level rate limit (from guardrails)
+  const guardrails = agent.guardrails;
+  if (guardrails.rate_limit_rpm != null) {
+    const agentCheck = checkRateLimit(
+      `agent:${agent.id}`,
+      guardrails.rate_limit_rpm,
+      60_000
+    );
+    if (!agentCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: {
+            message: `Agent "${agent.name}" rate limit exceeded (${guardrails.rate_limit_rpm} req/min). Retry after ${Math.ceil(agentCheck.resetMs / 1000)}s.`,
+            type: "rate_limit",
+          },
+        },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": String(guardrails.rate_limit_rpm),
+            "X-RateLimit-Remaining": "0",
+            "Retry-After": String(Math.ceil(agentCheck.resetMs / 1000)),
+          },
+        }
+      );
+    }
+  }
+
+  // 5c. Plan request limits (monthly)
   if (org) {
-    const limits = getPlanLimits((org.plan || "free") as PlanId);
+    const limits = getPlanLimits((orgPlan) as PlanId);
     if (limits.maxRequests !== Infinity) {
       const monthStart = new Date(
         new Date().getFullYear(),
@@ -543,7 +597,6 @@ export async function POST(request: NextRequest) {
   }
 
   // 6. Check guardrails
-  const guardrails = agent.guardrails;
 
   // Token limit check
   if (
@@ -624,7 +677,7 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (dbProvider) {
-    providerKey = dbProvider.api_key_encrypted;
+    providerKey = decrypt(dbProvider.api_key_encrypted);
   }
 
   // Fall back to env vars
@@ -679,7 +732,9 @@ export async function POST(request: NextRequest) {
           .order("is_default", { ascending: false })
           .limit(1)
           .single();
-        fallbackKey = fbProvider?.api_key_encrypted || null;
+        fallbackKey = fbProvider?.api_key_encrypted
+          ? decrypt(fbProvider.api_key_encrypted)
+          : null;
         if (!fallbackKey) {
           const envKeys: Record<string, string | undefined> = {
             openai: process.env.OPENAI_API_KEY,

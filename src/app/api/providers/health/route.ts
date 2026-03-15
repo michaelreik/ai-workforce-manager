@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { decrypt } from "@/lib/crypto";
 import type { Provider, HealthStatus } from "@/types/database";
 
 /**
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     providerType = provider.provider_type;
-    apiKey = provider.api_key_encrypted; // In production, decrypt this
+    apiKey = decrypt(provider.api_key_encrypted);
     baseUrl = provider.base_url;
   } else {
     // Test new provider (before saving)

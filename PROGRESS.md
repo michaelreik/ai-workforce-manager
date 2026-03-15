@@ -405,3 +405,12 @@
 - [x] TransformStream forwards chunks to client with zero latency while extracting usage in background
 - [x] Fallback char-based estimation (1 token ≈ 4 chars) if extraction fails
 - [x] `recordUsage()` + `checkSpikeDetection()` now run AFTER stream completes with actual token counts
+
+### Security Fix — Provider API Key Encryption
+- [x] `src/lib/crypto.ts` — AES-256-GCM encrypt/decrypt with `ENCRYPTION_KEY` env var
+- [x] `POST /api/providers` route — encrypts API key server-side before DB insert
+- [x] Provider settings page uses API route instead of direct Supabase insert
+- [x] Proxy decrypts keys from DB via `decrypt()` before forwarding to providers
+- [x] Health check route decrypts keys before testing connections
+- [x] Graceful migration: `decrypt()` returns un-encrypted strings as-is (checks for `:` format)
+- [x] CLAUDE.md updated with `ENCRYPTION_KEY` requirement and all env vars documented
