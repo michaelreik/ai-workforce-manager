@@ -97,7 +97,7 @@ jobs:
           kubectl apply -f k8s/staging/service.yml
           kubectl apply -f k8s/staging/ingress.yml
           kubectl -n openmanage-staging rollout restart deployment/openmanage-ai
-          kubectl -n openmanage-staging rollout status deployment/openmanage-ai --timeout=120s
+          kubectl -n openmanage-staging rollout status deployment/openmanage-ai --timeout=300s
 
   deploy-production:
     name: Deploy to Production
@@ -136,4 +136,4 @@ jobs:
           kubectl apply -f k8s/production/service.yml
           kubectl apply -f k8s/production/ingress.yml
           kubectl -n openmanage-production rollout restart deployment/openmanage-ai
-          kubectl -n openmanage-production rollout status deployment/openmanage-ai --timeout=180s
+          kubectl -n openmanage-production rollout status deployment/openmanage-ai --timeout=300s
