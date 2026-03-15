@@ -64,5 +64,4 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 12
-      imagePullSecrets:
-        - name: dockerhub-credentials
+      # imagePullSecrets not needed for public DockerHub repos
