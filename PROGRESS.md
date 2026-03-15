@@ -475,3 +475,8 @@
 ### Docs Links
 - [x] Landing page: "Docs" link in nav and footer
 - [x] Dashboard sidebar: "Help Center" nav item (HelpCircle icon) linking to `/docs`
+
+### Security Fix — Provider API Route Org Membership Check
+- [x] `POST /api/providers` now verifies user is a member of the target `org_id` via `org_members` lookup
+- [x] Returns 403 if user is not a member of the organization
+- [x] Prevents creating providers for foreign organizations

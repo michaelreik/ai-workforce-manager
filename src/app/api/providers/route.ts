@@ -36,6 +36,21 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Verify user is a member of the org they're creating a provider for
+  const { data: membership } = await supabase
+    .from("org_members")
+    .select("id")
+    .eq("org_id", org_id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!membership) {
+    return NextResponse.json(
+      { error: "Forbidden: not a member of this organization" },
+      { status: 403 }
+    );
+  }
+
   // Encrypt the API key before storing
   const api_key_encrypted = encrypt(api_key);
 
