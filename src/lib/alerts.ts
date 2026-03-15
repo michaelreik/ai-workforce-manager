@@ -1,10 +1,5 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AlertType, AlertSeverity } from "@/types/database";
-
-type SupabaseClient = {
-  from: (table: string) => {
-    insert: (data: Record<string, unknown>) => { select: () => { single: () => Promise<{ data: { id: string } | null; error: unknown }> } };
-  };
-};
 
 type CreateAlertParams = {
   supabase: SupabaseClient;

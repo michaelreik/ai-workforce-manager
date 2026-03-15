@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
         // Import createAlert to notify admins
         const { createAlert } = await import("@/lib/alerts");
         await createAlert({
-          supabase: supabase as never,
+          supabase,
           org_id: org.id,
           type: "budget_warning",
           severity: "critical",

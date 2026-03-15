@@ -322,7 +322,7 @@ async function recordUsage(
 
       if (pct >= 100) {
         await createAlert({
-          supabase: supabase as never,
+          supabase,
           org_id: orgId,
           agent_id: agentId,
           type: "budget_exceeded",
@@ -350,7 +350,7 @@ async function recordUsage(
 
         if (!recentAlerts || recentAlerts.length === 0) {
           await createAlert({
-            supabase: supabase as never,
+            supabase,
             org_id: orgId,
             agent_id: agentId,
             type: "budget_warning",
@@ -400,7 +400,7 @@ async function checkSpikeDetection(
   if (currentCost > avgCost * 3) {
     // Create spike alert
     await createAlert({
-      supabase: supabase as never,
+      supabase,
       org_id: orgId,
       agent_id: agentId,
       type: "kill_switch",
@@ -624,7 +624,7 @@ export async function POST(request: NextRequest) {
   );
   if (budgetCheck.exceeded) {
     await createAlert({
-      supabase: supabase as never,
+      supabase,
       org_id: agent.org_id,
       agent_id: agent.id,
       type: "budget_exceeded",
@@ -756,7 +756,7 @@ export async function POST(request: NextRequest) {
 
         // Create failover alert
         await createAlert({
-          supabase: supabase as never,
+          supabase,
           org_id: agent.org_id,
           agent_id: agent.id,
           type: "rate_limit",
