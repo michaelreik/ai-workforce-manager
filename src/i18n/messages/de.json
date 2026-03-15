@@ -858,6 +858,10 @@
   "workspace": {
     "title": "Workspace",
     "sources": "Quellen",
+    "importNav": "Import",
+    "surveysNav": "Umfragen",
+    "optimizationNav": "Optimierung",
+    "adoptionNav": "Adoption",
     "sourcesTitle": "Nutzungsquellen",
     "sourcesSubtitle": "KI-Tools und Datenquellen Ihrer Organisation verwalten",
     "addSource": "Quelle hinzufügen",

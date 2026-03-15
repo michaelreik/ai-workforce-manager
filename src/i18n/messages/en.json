@@ -858,6 +858,10 @@
   "workspace": {
     "title": "Workspace",
     "sources": "Sources",
+    "importNav": "Import",
+    "surveysNav": "Surveys",
+    "optimizationNav": "Optimization",
+    "adoptionNav": "Adoption",
     "sourcesTitle": "Usage Sources",
     "sourcesSubtitle": "Manage AI tools and data sources across your organization",
     "addSource": "Add Source",
