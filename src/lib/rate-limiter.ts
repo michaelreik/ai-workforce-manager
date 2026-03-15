@@ -35,6 +35,11 @@ export function checkRateLimit(
   return { allowed: true, remaining: limit - entry.count, resetMs };
 }
 
+export function _resetForTesting() {
+  store.clear();
+  cleanupCounter = 0;
+}
+
 export function getOrgRateLimit(plan: string): number {
   switch (plan) {
     case "enterprise":
