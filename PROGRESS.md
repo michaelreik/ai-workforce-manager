@@ -642,3 +642,29 @@
 - [x] "Sync Now" button on sources page (for api_sync type sources)
 
 > **Workspace Analytics Phase B COMPLETE**
+
+## Workspace Analytics — Phase C (Optimization & Adoption)
+
+### Prompt C1 — Seat Optimization Engine
+- [x] `/workspace/optimization` page:
+  - [x] Total potential savings card (monthly + annual)
+  - [x] Unused seats detection (0 messages, members listed)
+  - [x] Underutilized seats (<10 messages, downgrade savings)
+  - [x] Duplicate tool coverage (2+ assignments, consolidation savings)
+  - [x] Per-recommendation: severity badge, impact in $/month, affected members
+  - [x] "All optimized" empty state when no issues found
+
+### Prompt C2 — AI Adoption Playbook
+- [x] `/workspace/adoption` page:
+  - [x] Adoption Scorecard (0-100 score from adoption%, messages, tool diversity)
+  - [x] Color-coded gauge (red/amber/green)
+  - [x] Stats: active users, adoption rate, avg messages per user
+  - [x] AI Champions section (top 10% power users with department and tool count)
+  - [x] Stage-based Playbook (low/medium/high adoption):
+    - Low: awareness building, basic training
+    - Medium: target specific teams, advanced training
+    - High: optimize & standardize
+  - [x] Each action card with icon, description, and specific action items
+- [x] Full i18n: ~45 optimization + adoption keys in EN + DE
+
+> **Workspace Analytics Phase C COMPLETE — All 3 phases done.**
