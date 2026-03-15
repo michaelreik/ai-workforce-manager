@@ -433,3 +433,45 @@
 ### Fix — Member Display Names
 - [x] Settings members list now shows `display_name` from `user_profiles` instead of truncated user IDs
 - [x] Fetches profiles in parallel, falls back to truncated ID if no profile exists
+
+### Help Center & In-App Guide
+
+#### Interactive Integration Page (Prompt 3)
+- [x] `/settings/integration` reworked into comprehensive integration hub:
+  - [x] Quick Start progress tracker (checks providers, api_keys, tasks tables)
+  - [x] Framework selector chips (9 frameworks: Python, TS, cURL, LangChain, CrewAI, AutoGen, n8n, Make, Zapier)
+  - [x] Before/After code comparison for code frameworks
+  - [x] Numbered instructions for no-code tools (n8n, Make, Zapier)
+  - [x] Collapsible Reference sections: Models & Pricing, API Reference, Rate Limits (with plan badge), Response Headers, Error Codes
+  - [x] Auto-inserts masked API key prefix if user has one
+
+#### Public Help Center (Prompt 1)
+- [x] `/docs` page — public Help Center with 7 sections:
+  - [x] Getting Started: 5-step timeline with icons
+  - [x] How It Works: flow diagram + 3 benefit cards
+  - [x] Setup Guide: 5 accordion steps
+  - [x] Code Examples: 6 code frameworks + 3 no-code with copyable snippets
+  - [x] Use Cases: 3 scenario cards with ROI metrics
+  - [x] FAQ: 12 accordion Q&As
+  - [x] Troubleshooting: 6 error cards with solutions
+- [x] Sticky top nav (logo, Back to App, Sign Up) + sticky sidebar navigation
+- [x] IntersectionObserver for active section tracking
+- [x] Full i18n: `docs` namespace (~120 keys) in EN + DE
+
+#### Enhanced Onboarding Wizard (Prompt 2)
+- [x] `/onboarding` reworked with enhanced UX:
+  - [x] Step 0 (NEW): Welcome screen with 3 overview cards
+  - [x] Step 2: Team suggestion chips (Sales, Marketing, Support, Research, Data)
+  - [x] Step 3: Agent template cards (Lead Generator, Content Writer, Support Bot) + Custom
+  - [x] Step 4: Provider explainer card ("Why do we need your key?"), large provider cards
+  - [x] Step 5: Framework selector chips with code snippets
+  - [x] Step 6: Summary cards + "What's next?" with 5 action links
+  - [x] Progress bar: clickable completed steps with green checkmarks
+
+### Fix — Base UI Console Errors
+- [x] `nativeButton` warning: Button component auto-sets `nativeButton={false}` when `render` prop is provided
+- [x] Hydration mismatch: AppHeader wrapped in `dynamic()` with `ssr: false` via `app-header-client.tsx`
+
+### Docs Links
+- [x] Landing page: "Docs" link in nav and footer
+- [x] Dashboard sidebar: "Help Center" nav item (HelpCircle icon) linking to `/docs`

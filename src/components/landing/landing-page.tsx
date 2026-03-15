@@ -85,6 +85,9 @@ function Nav() {
           <a href="#pricing" className="hover:text-foreground transition-colors">
             Pricing
           </a>
+          <Link href="/docs" className="hover:text-foreground transition-colors">
+            Docs
+          </Link>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" render={<Link href="/login" />}>
@@ -707,6 +710,9 @@ function Footer() {
             <a href="#pricing" className="hover:text-foreground transition-colors">
               Pricing
             </a>
+            <Link href="/docs" className="hover:text-foreground transition-colors">
+              Docs
+            </Link>
             <Link href="/login" className="hover:text-foreground transition-colors">
               Log in
             </Link>

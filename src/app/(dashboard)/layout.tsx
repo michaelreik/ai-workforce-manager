@@ -1,6 +1,6 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { AppHeader } from "@/components/layout/app-header";
+import { AppHeaderClient } from "@/components/layout/app-header-client";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { TranslationProvider } from "@/components/providers/translation-provider";
 import { OrgProvider } from "@/components/providers/org-provider";
@@ -22,7 +22,7 @@ export default async function DashboardLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-              <AppHeader />
+              <AppHeaderClient />
               <div className="flex-1 overflow-auto">
                 <div className="px-6 py-4">
                   <Breadcrumbs />

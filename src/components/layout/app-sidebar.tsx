@@ -10,6 +10,7 @@ import {
   BarChart3,
   Bell,
   Settings,
+  HelpCircle,
   ChevronsUpDown,
   Check,
   Building2,
@@ -43,6 +44,7 @@ const navItems = [
   { key: "analytics", href: "/analytics", icon: BarChart3 },
   { key: "alerts", href: "/alerts", icon: Bell },
   { key: "settings", href: "/settings", icon: Settings },
+  { key: "help", href: "/docs", icon: HelpCircle },
 ] as const;
 
 export function AppSidebar() {
