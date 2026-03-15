@@ -328,3 +328,21 @@
   - [x] Activity tab: audit log timeline (reuses `AgentAuditLogTab`)
 - [x] Seed data updated: team `color`, `icon`, `lead_user_id`; `team_members` rows
 - [x] Build passes (`npm run build`)
+
+### Prompt 23 — User Profile Settings
+- [x] Database migration (`00003_user_profiles.sql`):
+  - [x] `user_profiles` table: display_name, avatar_url, timezone, theme, two_factor_enabled, notification_prefs (JSONB)
+  - [x] RLS policy: users can only manage their own profile
+  - [x] `updated_at` trigger
+- [x] TypeScript type: `UserProfile`
+- [x] i18n: `profile` namespace (~45 keys) in EN + DE, `profile` key in `nav` namespace
+- [x] Profile page (`/profile`) with sections:
+  - [x] Personal Info: avatar display, display name, email (read-only)
+  - [x] Appearance: theme picker (dark/light/system) with live apply, timezone selector (15 common zones)
+  - [x] Security: 2FA status badge (UI ready, enable/disable disabled — coming soon), password change form with validation
+  - [x] Notification Preferences: 4 toggles (critical, warning, info, digest) with descriptions
+  - [x] Data & Privacy: GDPR data export request button, delete account button (disabled, contact support)
+- [x] Header: "Profile" link now points to `/profile` instead of `/settings`
+- [x] Breadcrumbs: added `profile` and `teams` to nav keys
+- [x] Seed data: demo user profile with timezone and notification prefs
+- [x] Build passes (`npm run build`)

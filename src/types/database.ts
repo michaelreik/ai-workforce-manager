@@ -36,6 +36,24 @@ export type TeamMember = {
   created_at: string;
 };
 
+export type UserProfile = {
+  id: string;
+  user_id: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  timezone: string;
+  theme: "light" | "dark" | "system";
+  two_factor_enabled: boolean;
+  notification_prefs: {
+    critical: boolean;
+    warning: boolean;
+    info: boolean;
+    digest: boolean;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
 export type AgentStatus = "active" | "paused" | "error" | "stopped";
 
 export type Guardrails = {

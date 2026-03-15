@@ -345,7 +345,13 @@ INSERT INTO audit_log (org_id, user_id, action, target_type, target_id, details,
   ('00000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'agent_resumed', 'agent', '20000000-0000-0000-0000-000000000005', '{"reason": "manual"}'::jsonb, now() - interval '8 days');
 
 -- ============================================================
--- 10. Team Members
+-- 10. User Profile
+-- ============================================================
+INSERT INTO user_profiles (user_id, display_name, timezone, theme, notification_prefs) VALUES
+  ('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'Demo User', 'Europe/Berlin', 'dark', '{"critical": true, "warning": true, "info": false, "digest": true}'::jsonb);
+
+-- ============================================================
+-- 11. Team Members
 -- ============================================================
 INSERT INTO team_members (team_id, user_id, role) VALUES
   ('10000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'lead'),

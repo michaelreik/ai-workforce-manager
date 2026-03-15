@@ -21,7 +21,7 @@ export function Breadcrumbs() {
 
   if (segments.length === 0) return null;
 
-  const navKeys = ["dashboard", "agents", "budget", "analytics", "alerts", "settings"];
+  const navKeys = ["dashboard", "agents", "teams", "budget", "analytics", "alerts", "settings", "profile"];
 
   return (
     <Breadcrumb>
