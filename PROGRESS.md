@@ -387,6 +387,17 @@
 - [x] Settings page: added Providers quick-link card (3-column grid)
 - [x] Full i18n: `providers` namespace (~35 keys) in EN + DE
 
+### Bug Fix — Budget Update Race Condition
+- [x] Created `increment_budget_spent` PostgreSQL RPC function (`00005_budget_rpc.sql`):
+  - [x] Atomic `INSERT ... ON CONFLICT DO UPDATE SET spent = spent + amount`
+  - [x] Eliminates SELECT→UPDATE race condition in concurrent requests
+  - [x] `SECURITY DEFINER` for RLS bypass within function
+- [x] Simplified `recordUsage()` in proxy route:
+  - [x] Removed unsafe `.then()` fallback blocks (SELECT→UPDATE pattern)
+  - [x] Daily + monthly agent-level budget upserts via parallel `Promise.all` RPC calls
+  - [x] Added team-level budget tracking: looks up agent's `team_id`, fires team budget RPC calls
+- [x] Net reduction: 71 lines removed, 42 added
+
 ### Bug Fix — Streaming Token Tracking
 - [x] Fixed `stream: true` requests logging `tokens_input=0`, `tokens_output=0`
 - [x] OpenAI: inject `stream_options: { include_usage: true }` to get usage in final SSE chunk

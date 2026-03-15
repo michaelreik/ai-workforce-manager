@@ -249,78 +249,49 @@ async function recordUsage(
     finished_at: now.toISOString(),
   });
 
-  // Upsert daily budget entry
-  await supabase.rpc("increment_budget_spent", {
-    p_org_id: orgId,
-    p_agent_id: agentId,
-    p_period_type: "daily",
-    p_period_start: today,
-    p_amount: cost,
-  }).then(async (res) => {
-    // Fallback if RPC doesn't exist: upsert manually
-    if (res.error) {
-      const { data: existing } = await supabase
-        .from("budget_entries")
-        .select("id, spent")
-        .eq("org_id", orgId)
-        .eq("agent_id", agentId)
-        .eq("period_type", "daily")
-        .eq("period_start", today)
-        .single();
+  // Atomic budget upserts via RPC (daily + monthly, agent-level)
+  await Promise.all([
+    supabase.rpc("increment_budget_spent", {
+      p_org_id: orgId,
+      p_agent_id: agentId,
+      p_period_type: "daily",
+      p_period_start: today,
+      p_amount: cost,
+    }),
+    supabase.rpc("increment_budget_spent", {
+      p_org_id: orgId,
+      p_agent_id: agentId,
+      p_period_type: "monthly",
+      p_period_start: monthStart,
+      p_amount: cost,
+    }),
+  ]);
 
-      if (existing) {
-        await supabase
-          .from("budget_entries")
-          .update({ spent: Number(existing.spent) + cost })
-          .eq("id", existing.id);
-      } else {
-        await supabase.from("budget_entries").insert({
-          org_id: orgId,
-          agent_id: agentId,
-          period_type: "daily",
-          period_start: today,
-          allocated: 0,
-          spent: cost,
-        });
-      }
-    }
-  });
+  // Also update team-level budget if agent belongs to a team
+  const { data: agentRow } = await supabase
+    .from("agents")
+    .select("team_id")
+    .eq("id", agentId)
+    .single();
 
-  // Upsert monthly budget entry
-  await supabase.rpc("increment_budget_spent", {
-    p_org_id: orgId,
-    p_agent_id: agentId,
-    p_period_type: "monthly",
-    p_period_start: monthStart,
-    p_amount: cost,
-  }).then(async (res) => {
-    if (res.error) {
-      const { data: existing } = await supabase
-        .from("budget_entries")
-        .select("id, spent")
-        .eq("org_id", orgId)
-        .eq("agent_id", agentId)
-        .eq("period_type", "monthly")
-        .eq("period_start", monthStart)
-        .single();
-
-      if (existing) {
-        await supabase
-          .from("budget_entries")
-          .update({ spent: Number(existing.spent) + cost })
-          .eq("id", existing.id);
-      } else {
-        await supabase.from("budget_entries").insert({
-          org_id: orgId,
-          agent_id: agentId,
-          period_type: "monthly",
-          period_start: monthStart,
-          allocated: 0,
-          spent: cost,
-        });
-      }
-    }
-  });
+  if (agentRow?.team_id) {
+    await Promise.all([
+      supabase.rpc("increment_budget_spent", {
+        p_org_id: orgId,
+        p_agent_id: agentRow.team_id,
+        p_period_type: "daily",
+        p_period_start: today,
+        p_amount: cost,
+      }),
+      supabase.rpc("increment_budget_spent", {
+        p_org_id: orgId,
+        p_agent_id: agentRow.team_id,
+        p_period_type: "monthly",
+        p_period_start: monthStart,
+        p_amount: cost,
+      }),
+    ]);
+  }
 
   // Check budget thresholds and create alerts
   const agent = await supabase
