@@ -156,22 +156,39 @@ export default function ProfilePage() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase
-        .from("user_profiles")
-        .upsert(
-          {
-            user_id: user.id,
-            display_name: profile.display_name || null,
-            avatar_url: profile.avatar_url || null,
-            timezone: profile.timezone,
-            theme: profile.theme,
-            two_factor_enabled: profile.two_factor_enabled,
-            notification_prefs: profile.notification_prefs,
-          },
-          { onConflict: "user_id" }
-        );
+      const profileData = {
+        user_id: user.id,
+        display_name: profile.display_name || null,
+        avatar_url: profile.avatar_url || null,
+        timezone: profile.timezone,
+        theme: profile.theme,
+        two_factor_enabled: profile.two_factor_enabled,
+        notification_prefs: profile.notification_prefs,
+      };
 
-      if (error) throw error;
+      // Try update first, then insert if no row exists
+      const { data: existing } = await supabase
+        .from("user_profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+      let error;
+      if (existing) {
+        ({ error } = await supabase
+          .from("user_profiles")
+          .update(profileData)
+          .eq("user_id", user.id));
+      } else {
+        ({ error } = await supabase
+          .from("user_profiles")
+          .insert(profileData));
+      }
+
+      if (error) {
+        console.error("Profile save error:", error.message, error.code, error.details);
+        throw error;
+      }
 
       toast.success(t("saved"));
     } catch (err) {
