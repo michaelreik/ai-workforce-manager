@@ -70,18 +70,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          install_components: 'gke-gcloud-auth-plugin'
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_CLUSTER_LOCATION }}
 
       - name: Deploy to Staging
         run: |
           export IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}
           export DOCKER_IMAGE=${{ env.DOCKER_IMAGE }}
+          kubectl create namespace openmanage-staging --dry-run=client -o yaml | kubectl apply -f -
           envsubst < k8s/staging/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/staging/service.yml
           kubectl apply -f k8s/staging/ingress.yml
@@ -98,18 +107,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          install_components: 'gke-gcloud-auth-plugin'
+
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_CLUSTER_LOCATION }}
 
       - name: Deploy to Production
         run: |
           export IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}
           export DOCKER_IMAGE=${{ env.DOCKER_IMAGE }}
+          kubectl create namespace openmanage-production --dry-run=client -o yaml | kubectl apply -f -
           envsubst < k8s/production/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/production/service.yml
           kubectl apply -f k8s/production/ingress.yml
