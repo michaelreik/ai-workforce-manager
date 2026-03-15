@@ -149,7 +149,7 @@ export function AgentFormModal({
   // Populate form when editing
   useEffect(() => {
     if (agent) {
-      setForm({
+      setForm({ // eslint-disable-line react-hooks/set-state-in-effect
         name: agent.name,
         description: agent.description || "",
         team_id: agent.team_id || "",

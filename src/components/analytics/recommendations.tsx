@@ -154,7 +154,7 @@ export function AnalyticsRecommendations({
         const lastTask = agentTasks[0]; // sorted desc by started_at
         if (lastTask) {
           const daysSinceLastTask = Math.floor(
-            (Date.now() - new Date(lastTask.started_at).getTime()) /
+            (Date.now() - new Date(lastTask.started_at).getTime()) / // eslint-disable-line react-hooks/purity
               (1000 * 60 * 60 * 24)
           );
           if (daysSinceLastTask >= 7) {

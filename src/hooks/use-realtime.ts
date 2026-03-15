@@ -48,14 +48,17 @@ export function useRealtime<T = Record<string, unknown>>(
   const onUpdateRef = useRef(onUpdate);
   const onDeleteRef = useRef(onDelete);
   const onPollFallbackRef = useRef(onPollFallback);
-  onInsertRef.current = onInsert;
-  onUpdateRef.current = onUpdate;
-  onDeleteRef.current = onDelete;
-  onPollFallbackRef.current = onPollFallback;
+
+  useEffect(() => {
+    onInsertRef.current = onInsert;
+    onUpdateRef.current = onUpdate;
+    onDeleteRef.current = onDelete;
+    onPollFallbackRef.current = onPollFallback;
+  });
 
   useEffect(() => {
     if (!enabled) {
-      setStatus("disconnected");
+      setStatus("disconnected"); // eslint-disable-line react-hooks/set-state-in-effect
       return;
     }
 

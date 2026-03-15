@@ -42,7 +42,7 @@ export function OnboardingChecklist() {
     );
 
     if (isComplete === "true" || isDismissed === "true") {
-      setDismissed(true);
+      setDismissed(true); // eslint-disable-line react-hooks/set-state-in-effect
       return;
     }
 

@@ -55,7 +55,7 @@ export default function AnalyticsPage() {
   }, [supabase, rangeStart]);
 
   useEffect(() => {
-    loadData();
+    loadData(); // eslint-disable-line react-hooks/set-state-in-effect
   }, [loadData]);
 
   const dateRangeButtons: { key: DateRange; label: string }[] = [

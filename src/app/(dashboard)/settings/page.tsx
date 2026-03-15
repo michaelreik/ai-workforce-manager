@@ -91,8 +91,8 @@ export default function SettingsPage() {
   // Load org data
   useEffect(() => {
     if (!currentOrg) return;
-    setOrgName(currentOrg.name);
-    setOrgSlug(currentOrg.slug);
+    setOrgName(currentOrg.name); // eslint-disable-line react-hooks/set-state-in-effect
+    setOrgSlug(currentOrg.slug); // eslint-disable-line react-hooks/set-state-in-effect
   }, [currentOrg]);
 
   // Load members

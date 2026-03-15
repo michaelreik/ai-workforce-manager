@@ -89,7 +89,7 @@ export function TeamFormModal({
 
   useEffect(() => {
     if (team) {
-      setForm({
+      setForm({ // eslint-disable-line react-hooks/set-state-in-effect
         name: team.name,
         description: team.description || "",
         icon: team.icon,

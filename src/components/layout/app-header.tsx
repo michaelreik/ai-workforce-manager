@@ -231,7 +231,7 @@ export function AppHeader() {
     : "??";
 
   function formatTimeShort(dateStr: string): string {
-    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const diffMs = Date.now() - new Date(dateStr).getTime(); // eslint-disable-line react-hooks/purity
     const mins = Math.floor(diffMs / 60000);
     if (mins < 1) return "now";
     if (mins < 60) return `${mins}m`;
