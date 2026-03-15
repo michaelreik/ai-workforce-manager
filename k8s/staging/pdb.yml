@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: openmanage-ai
+  namespace: openmanage-staging
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: openmanage-ai
+      env: staging

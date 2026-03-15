@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: openmanage-ai
+  namespace: openmanage-staging
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    # SSE/Streaming support for the proxy endpoint
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($request_uri ~* "/api/v1/chat/completions") {
+        proxy_buffering off;
+        proxy_cache off;
+        chunked_transfer_encoding on;
+      }
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - staging.openmanage.ai
+      secretName: staging-openmanage-tls
+  rules:
+    - host: staging.openmanage.ai
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: openmanage-ai
+                port:
+                  number: 80

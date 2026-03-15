@@ -495,3 +495,52 @@
 - [x] Suite 5 — Stripe Webhook (6 tests): checkout, subscription lifecycle, payment failed, signature
 - [x] Suite 6 — Provider Health (6 tests): OpenAI/Anthropic health, key decryption, auth
 - **Total: 86 tests passing**
+
+---
+
+## CI/CD & Kubernetes Deployment
+
+### Docker Setup
+- [x] Multi-stage Dockerfile (deps → build → runner) with standalone output
+- [x] Non-root user (`nextjs:nodejs`), health check, build args for public env vars
+- [x] `.dockerignore` (node_modules, .next, .git, .env*, supabase, .github)
+- [x] `docker-compose.yml` for local containerized testing
+- [x] `next.config.ts` updated with `output: "standalone"`
+
+### GitHub Actions CI/CD
+- [x] `.github/workflows/ci.yml` — runs on push/PR:
+  - [x] Lint, TypeScript type check, test with coverage, build
+  - [x] Coverage report uploaded as artifact
+- [x] `.github/workflows/deploy.yml` — runs on push to main / manual trigger:
+  - [x] Multi-arch Docker build with BuildKit cache (GHA)
+  - [x] Push to DockerHub (tagged: sha + latest + staging)
+  - [x] Auto-deploy to Staging on main push
+  - [x] Manual deploy to Production with environment approval
+
+### Kubernetes — Staging (`openmanage-staging`)
+- [x] Namespace, ConfigMap, Secrets (template)
+- [x] Deployment: 2 replicas, rolling update, liveness/readiness/startup probes
+- [x] Service (ClusterIP), Ingress (staging.openmanage.ai, TLS via cert-manager)
+- [x] SSE/streaming support (`proxy-buffering: off` for `/api/v1/chat/completions`)
+- [x] HPA: 2–5 replicas (CPU 70%, memory 80%)
+- [x] PDB: minAvailable 1
+
+### Kubernetes — Production (`openmanage-production`)
+- [x] Same structure as staging with production-grade settings:
+  - [x] 3 replicas (HPA 3–20, CPU 60%, memory 75%)
+  - [x] Higher resources (200m/512Mi requests, 1000m/1Gi limits)
+  - [x] PDB: minAvailable 2
+  - [x] Ingress rate limiting (50 rps, 20 connections)
+  - [x] `www.openmanage.ai` redirect
+  - [x] NetworkPolicy: ingress from nginx only, egress DNS + HTTPS only
+
+### Deployment Scripts & Docs
+- [x] `scripts/deploy.sh` — manual deploy with secret validation
+- [x] `scripts/rollback.sh` — quick rollback
+- [x] `scripts/logs.sh` — tail pod logs
+- [x] `scripts/status.sh` — deployment status overview
+- [x] `DEPLOYMENT.md` — full deployment guide (setup, DNS, operations, architecture)
+
+### Fix — tsconfig Excluding Test Files
+- [x] Added `src/test`, `**/*.test.ts`, `**/*.test.tsx` to tsconfig `exclude`
+- [x] Fixes `Cannot find name 'vi'` build error from Vitest test helpers

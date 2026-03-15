@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: openmanage-ai
+  namespace: openmanage-production
+spec:
+  podSelector:
+    matchLabels:
+      app: openmanage-ai
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from ingress controller only
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 3000
+          protocol: TCP
+  egress:
+    # Allow DNS
+    - to: []
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow HTTPS outbound (Supabase, OpenAI, Anthropic, Stripe, Resend)
+    - to: []
+      ports:
+        - port: 443
+          protocol: TCP

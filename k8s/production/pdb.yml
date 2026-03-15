@@ -1,0 +1,11 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: openmanage-ai
+  namespace: openmanage-production
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: openmanage-ai
+      env: production
