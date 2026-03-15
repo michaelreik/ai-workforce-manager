@@ -62,7 +62,8 @@
     "atRisk": "Agents at Risk",
     "pauseAll": "Pause All Agents",
     "pauseAllConfirm": "Are you sure you want to pause ALL active agents? This will immediately stop all agent operations.",
-    "allAgentsPaused": "All agents have been paused"
+    "allAgentsPaused": "All agents have been paused",
+    "helpQuickControls": "Agents using over 90% of their budget or in error state appear here. Use Pause All to immediately stop all agent operations in an emergency."
   },
   "agents": {
     "title": "Agents",
@@ -176,7 +177,10 @@
     "presetDesc_conservative": "Low limits, all safety features enabled. Best for experimental agents.",
     "presetDesc_standard": "Balanced limits with auto-pause enabled. Good for most use cases.",
     "presetDesc_aggressive": "High limits, minimal restrictions. For trusted, high-volume agents.",
-    "presetDesc_custom": "No preset limits applied. Configure guardrails manually after creation."
+    "presetDesc_custom": "No preset limits applied. Configure guardrails manually after creation.",
+    "helpBudgetLimits": "Set maximum spend limits per day and month. When reached, the agent can be auto-paused or downgraded to a cheaper model.",
+    "helpExecLimits": "Control how long each task can run and how many tokens it can use per request. Prevents runaway costs from unexpectedly large prompts.",
+    "helpAutomation": "Automated safety features that trigger when limits are hit. These run on every API request through the proxy."
   },
   "teams": {
     "title": "Teams",
@@ -263,7 +267,9 @@
     "overAllocated": "Over-allocated",
     "spent": "Spent",
     "changed": "changed",
-    "changesSaved": "Budget allocations saved"
+    "changesSaved": "Budget allocations saved",
+    "helpTeamBudgets": "Each team has a monthly budget that's split across its agents. The progress bar shows how much has been spent. Use the Allocate Budget page to redistribute.",
+    "helpTimeline": "Shows cumulative spending over the last 30 days. The dashed red line is your total budget limit. If the curve approaches the line, you may need to reduce spending or increase budget."
   },
   "analytics": {
     "title": "Analytics",

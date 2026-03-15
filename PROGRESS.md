@@ -346,3 +346,15 @@
 - [x] Breadcrumbs: added `profile` and `teams` to nav keys
 - [x] Seed data: demo user profile with timezone and notification prefs
 - [x] Build passes (`npm run build`)
+
+### Prompt 25 (partial) — Contextual Help & Empty States
+- [x] `HelpTooltip` component (`src/components/ui/help-tooltip.tsx`):
+  - [x] Reusable `?` icon with tooltip content and optional "Learn more" link
+  - [x] Uses Radix Tooltip via shadcn/ui
+- [x] `EmptyState` component (`src/components/ui/empty-state.tsx`):
+  - [x] Reusable empty state with icon, title, description, primary/secondary action buttons
+- [x] Contextual help tooltips added to:
+  - [x] Guardrails: Budget Limits, Execution Limits, Automation sections
+  - [x] Dashboard: Quick Controls / Kill Switch section
+  - [x] Budget: Team Budgets section, Timeline chart
+- [x] i18n help text keys (en + de) for all tooltips

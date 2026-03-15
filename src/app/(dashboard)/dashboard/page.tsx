@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { useTranslations } from "@/i18n/use-translations";
 import { useOrg } from "@/components/providers/org-provider";
 import { createClient } from "@/lib/supabase/client";
@@ -384,7 +385,10 @@ export default function DashboardPage() {
       {/* Quick Controls — At-Risk Agents */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">{t("quickControls")}</CardTitle>
+          <CardTitle className="text-lg flex items-center gap-2">
+            {t("quickControls")}
+            <HelpTooltip content={t("helpQuickControls")} />
+          </CardTitle>
           {stats && stats.activeAgents > 0 && (
             <Button
               variant="destructive"

@@ -62,7 +62,8 @@
     "atRisk": "Gefährdete Agenten",
     "pauseAll": "Alle Agenten pausieren",
     "pauseAllConfirm": "Sind Sie sicher, dass Sie ALLE aktiven Agenten pausieren möchten? Dies stoppt sofort alle Agentenoperationen.",
-    "allAgentsPaused": "Alle Agenten wurden pausiert"
+    "allAgentsPaused": "Alle Agenten wurden pausiert",
+    "helpQuickControls": "Agenten mit über 90% Budgetverbrauch oder im Fehlerzustand erscheinen hier. Verwenden Sie 'Alle pausieren', um alle Agentenoperationen sofort zu stoppen."
   },
   "agents": {
     "title": "Agenten",
@@ -176,7 +177,10 @@
     "presetDesc_conservative": "Niedrige Limits, alle Sicherheitsfunktionen aktiv. Ideal für experimentelle Agenten.",
     "presetDesc_standard": "Ausgewogene Limits mit Auto-Pause. Gut für die meisten Anwendungsfälle.",
     "presetDesc_aggressive": "Hohe Limits, minimale Einschränkungen. Für bewährte Hochvolumen-Agenten.",
-    "presetDesc_custom": "Keine voreingestellten Limits. Leitplanken nach Erstellung manuell konfigurieren."
+    "presetDesc_custom": "Keine voreingestellten Limits. Leitplanken nach Erstellung manuell konfigurieren.",
+    "helpBudgetLimits": "Maximale Ausgabenlimits pro Tag und Monat festlegen. Bei Erreichen kann der Agent automatisch pausiert oder auf ein günstigeres Modell umgestellt werden.",
+    "helpExecLimits": "Steuern Sie, wie lange jede Aufgabe laufen kann und wie viele Tokens pro Anfrage verwendet werden. Verhindert unkontrollierte Kosten durch unerwartet große Prompts.",
+    "helpAutomation": "Automatische Sicherheitsfunktionen, die bei Erreichen der Limits ausgelöst werden. Diese laufen bei jeder API-Anfrage über den Proxy."
   },
   "teams": {
     "title": "Teams",
@@ -263,7 +267,9 @@
     "overAllocated": "Überbucht",
     "spent": "Ausgegeben",
     "changed": "geändert",
-    "changesSaved": "Budget-Zuweisungen gespeichert"
+    "changesSaved": "Budget-Zuweisungen gespeichert",
+    "helpTeamBudgets": "Jedes Team hat ein monatliches Budget, das auf seine Agenten aufgeteilt wird. Der Fortschrittsbalken zeigt die bisherigen Ausgaben. Verwenden Sie die Budget-Zuweisung zur Umverteilung.",
+    "helpTimeline": "Zeigt die kumulativen Ausgaben der letzten 30 Tage. Die gestrichelte rote Linie ist Ihre Budgetgrenze. Wenn die Kurve sich der Linie nähert, sollten Sie Ausgaben reduzieren oder das Budget erhöhen."
   },
   "analytics": {
     "title": "Analytik",

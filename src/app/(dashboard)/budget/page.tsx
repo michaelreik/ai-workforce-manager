@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { useTranslations } from "@/i18n/use-translations";
 import { useOrg } from "@/components/providers/org-provider";
 import { createClient } from "@/lib/supabase/client";
@@ -350,7 +351,10 @@ export default function BudgetPage() {
 
       {/* Team Budgets */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">{t("teamBudgets")}</h2>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          {t("teamBudgets")}
+          <HelpTooltip content={t("helpTeamBudgets")} />
+        </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {teamBudgets.map((tb) => {
             const pct =
@@ -424,7 +428,10 @@ export default function BudgetPage() {
       {/* Budget Timeline Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{t("timeline")}</CardTitle>
+          <CardTitle className="text-lg flex items-center gap-2">
+            {t("timeline")}
+            <HelpTooltip content={t("helpTimeline")} />
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {dailyData.length > 0 ? (

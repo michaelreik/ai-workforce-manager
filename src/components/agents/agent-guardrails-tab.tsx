@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { useTranslations } from "@/i18n/use-translations";
 import type { Guardrails } from "@/types/database";
 
@@ -37,7 +38,10 @@ export function AgentGuardrailsTab({
       {/* Budget Limits */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("guardrailBudgetLimits")}</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2">
+            {t("guardrailBudgetLimits")}
+            <HelpTooltip content={t("helpBudgetLimits")} />
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -80,7 +84,10 @@ export function AgentGuardrailsTab({
       {/* Execution Limits */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("guardrailExecLimits")}</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2">
+            {t("guardrailExecLimits")}
+            <HelpTooltip content={t("helpExecLimits")} />
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
@@ -125,7 +132,10 @@ export function AgentGuardrailsTab({
       {/* Automation Toggles */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("guardrailAutomation")}</CardTitle>
+          <CardTitle className="text-base flex items-center gap-2">
+            {t("guardrailAutomation")}
+            <HelpTooltip content={t("helpAutomation")} />
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
