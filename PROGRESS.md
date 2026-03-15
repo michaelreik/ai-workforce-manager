@@ -480,3 +480,8 @@
 - [x] `POST /api/providers` now verifies user is a member of the target `org_id` via `org_members` lookup
 - [x] Returns 403 if user is not a member of the organization
 - [x] Prevents creating providers for foreign organizations
+
+### Cleanup — Remove `as never` Casts
+- [x] `createAlert()` now uses `SupabaseClient` type from `@supabase/supabase-js` instead of custom narrow type
+- [x] Removed all 6 `as never` casts (5 in proxy route, 1 in stripe webhook)
+- [x] Verified `stream_options: { include_usage: true }` is correctly injected in `forwardToOpenAI`
