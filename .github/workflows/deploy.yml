@@ -121,7 +121,7 @@ jobs:
       - name: Get GKE credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+          cluster_name: ${{ secrets.GKE_CLUSTER_NAME_PRODUCTION }}
           location: ${{ secrets.GKE_CLUSTER_LOCATION }}
 
       - name: Deploy to Production
