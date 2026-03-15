@@ -58,6 +58,7 @@ jobs:
             NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
             NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
             NEXT_PUBLIC_APP_URL=${{ github.event.inputs.environment == 'production' && 'https://openmanage.ai' || 'https://staging.openmanage.ai' }}
+          no-cache: true
 
   deploy-staging:
     name: Deploy to Staging
