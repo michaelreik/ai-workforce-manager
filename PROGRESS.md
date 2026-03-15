@@ -425,3 +425,11 @@
 - [x] Health check route decrypts keys before testing connections
 - [x] Graceful migration: `decrypt()` returns un-encrypted strings as-is (checks for `:` format)
 - [x] CLAUDE.md updated with `ENCRYPTION_KEY` requirement and all env vars documented
+
+### Fix — Profile Save
+- [x] Replaced broken `upsert` with explicit SELECT → UPDATE/INSERT fallback
+- [x] Migration `00006_fix_profile_rls.sql` — explicit per-operation RLS policies for user_profiles
+
+### Fix — Member Display Names
+- [x] Settings members list now shows `display_name` from `user_profiles` instead of truncated user IDs
+- [x] Fetches profiles in parallel, falls back to truncated ID if no profile exists
