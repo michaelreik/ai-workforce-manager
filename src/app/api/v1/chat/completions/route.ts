@@ -631,20 +631,39 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 7. Get provider API key from environment
-  // In production, these would come from encrypted org settings
-  const providerKeys: Record<string, string | undefined> = {
-    openai: process.env.OPENAI_API_KEY,
-    anthropic: process.env.ANTHROPIC_API_KEY,
-    google: process.env.GOOGLE_API_KEY,
-  };
+  // 7. Get provider API key — try DB first, then env vars
+  let providerKey: string | undefined;
 
-  const providerKey = providerKeys[provider];
+  // Check for org-configured provider in DB
+  const { data: dbProvider } = await supabase
+    .from("providers")
+    .select("api_key_encrypted, base_url")
+    .eq("org_id", agent.org_id)
+    .eq("provider_type", provider)
+    .eq("health_status", "healthy")
+    .order("is_default", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (dbProvider) {
+    providerKey = dbProvider.api_key_encrypted;
+  }
+
+  // Fall back to env vars
+  if (!providerKey) {
+    const envKeys: Record<string, string | undefined> = {
+      openai: process.env.OPENAI_API_KEY,
+      anthropic: process.env.ANTHROPIC_API_KEY,
+      google: process.env.GOOGLE_API_KEY,
+    };
+    providerKey = envKeys[provider];
+  }
+
   if (!providerKey) {
     return NextResponse.json(
       {
         error: {
-          message: `No API key configured for provider: ${provider}`,
+          message: `No API key configured for provider: ${provider}. Add one in Settings → Providers.`,
           type: "config_error",
         },
       },
@@ -671,7 +690,27 @@ export async function POST(request: NextRequest) {
     // If primary model fails and fallback is available, retry
     if (!providerResponse.ok && agent.fallback_model) {
       const fallbackProvider = getProvider(agent.fallback_model);
-      const fallbackKey = fallbackProvider ? providerKeys[fallbackProvider] : null;
+      // Try DB provider for fallback, then env var
+      let fallbackKey: string | null = null;
+      if (fallbackProvider) {
+        const { data: fbProvider } = await supabase
+          .from("providers")
+          .select("api_key_encrypted")
+          .eq("org_id", agent.org_id)
+          .eq("provider_type", fallbackProvider)
+          .order("is_default", { ascending: false })
+          .limit(1)
+          .single();
+        fallbackKey = fbProvider?.api_key_encrypted || null;
+        if (!fallbackKey) {
+          const envKeys: Record<string, string | undefined> = {
+            openai: process.env.OPENAI_API_KEY,
+            anthropic: process.env.ANTHROPIC_API_KEY,
+            google: process.env.GOOGLE_API_KEY,
+          };
+          fallbackKey = envKeys[fallbackProvider] || null;
+        }
+      }
 
       if (fallbackProvider && fallbackKey) {
         usedModel = agent.fallback_model;

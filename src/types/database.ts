@@ -161,3 +161,21 @@ export type AuditLog = {
   details: Record<string, unknown>;
   created_at: string;
 };
+
+export type ProviderType = "openai" | "anthropic" | "google" | "azure" | "custom";
+export type HealthStatus = "healthy" | "degraded" | "down" | "unknown";
+
+export type Provider = {
+  id: string;
+  org_id: string;
+  provider_type: ProviderType;
+  display_name: string;
+  api_key_encrypted: string;
+  base_url: string | null;
+  rate_limit_rpm: number | null;
+  is_default: boolean;
+  health_status: HealthStatus;
+  last_health_check: string | null;
+  created_at: string;
+  updated_at: string;
+};

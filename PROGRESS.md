@@ -358,3 +358,31 @@
   - [x] Dashboard: Quick Controls / Kill Switch section
   - [x] Budget: Team Budgets section, Timeline chart
 - [x] i18n help text keys (en + de) for all tooltips
+
+### Prompt 10 (V2) — Provider Management
+- [x] Database migration (`00004_providers.sql`):
+  - [x] `providers` table: org_id, provider_type, display_name, api_key_encrypted, base_url, rate_limit_rpm, is_default, health_status, last_health_check
+  - [x] RLS policy via `user_org_ids()`
+  - [x] Indexes + updated_at trigger
+- [x] TypeScript types: `Provider`, `ProviderType`, `HealthStatus`
+- [x] Provider settings page (`/settings/providers`):
+  - [x] Provider cards with status badge (healthy/degraded/down/unknown), type, rate limit, last check
+  - [x] Default provider badge + set default action
+  - [x] Test Connection button per provider (calls health check API)
+  - [x] Delete provider with confirmation
+  - [x] Empty state with CTA using reusable EmptyState component
+- [x] Add Provider modal:
+  - [x] Provider type selector (OpenAI, Anthropic, Google, Azure, Custom)
+  - [x] Display name, API key (password), base URL (for Azure/Custom), rate limit
+  - [x] Help tooltips on key fields
+  - [x] Inline "Test Connection" with status badge result + latency
+- [x] Health check API (`POST /api/providers/health`):
+  - [x] Tests OpenAI (list models), Anthropic (minimal message), Google (list models), Azure
+  - [x] Returns status + message + latency
+  - [x] Updates provider health_status in DB
+- [x] Proxy updated to use DB-stored provider keys:
+  - [x] Checks `providers` table first (org-scoped, healthy, default-preferred)
+  - [x] Falls back to env vars if no DB provider found
+  - [x] Fallback model key resolution also uses DB → env var chain
+- [x] Settings page: added Providers quick-link card (3-column grid)
+- [x] Full i18n: `providers` namespace (~35 keys) in EN + DE

@@ -41,6 +41,7 @@ import {
   Bell,
   Settings2,
   Key,
+  Cable,
   Link as LinkIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -323,8 +324,21 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Quick links to API Keys and Integration */}
-          <div className="grid gap-4 sm:grid-cols-2">
+          {/* Quick links to Providers, API Keys and Integration */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Card className="group hover:border-foreground/20 transition-colors">
+              <Link href="/settings/providers" className="block">
+                <CardContent className="flex items-center gap-4 py-6">
+                  <Cable className="h-8 w-8 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <div>
+                    <p className="font-medium text-sm">{t("providers")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("providersDesc")}
+                    </p>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
             <Card className="group hover:border-foreground/20 transition-colors">
               <Link href="/settings/api-keys" className="block">
                 <CardContent className="flex items-center gap-4 py-6">
