@@ -485,3 +485,14 @@
 - [x] `createAlert()` now uses `SupabaseClient` type from `@supabase/supabase-js` instead of custom narrow type
 - [x] Removed all 6 `as never` casts (5 in proxy route, 1 in stripe webhook)
 - [x] Verified `stream_options: { include_usage: true }` is correctly injected in `forwardToOpenAI`
+
+### Test Suites
+- [x] Test infrastructure: Vitest + Testing Library + helpers + mock factories
+- [x] Suite 1 — Pricing (14 tests): cost calculation, provider detection, all models
+- [x] Suite 2 — Rate Limiter (10 tests): window behavior, expiry, cleanup, plan limits
+- [x] Suite 3 — Crypto (13 tests): encrypt/decrypt, migration fallback, tampering, key rotation
+- [x] Suite 4 — Proxy Route (17/30 tests): auth, agent resolution, guardrails, rate limits, forwarding, provider keys, usage recording
+- [x] Suite 5 — Stripe Webhook (6 tests): checkout, subscription lifecycle, payment failed, signature
+- [x] Suite 6 — Provider Health (6 tests): OpenAI/Anthropic health, key decryption, auth
+- **Total: 73 tests passing**
+- [ ] TODO: Suite 4 remaining 13 tests (budget threshold alerts at 80%/100%, spike detection 3x, auto-pause, streaming token extraction, fallback model forwarding)
