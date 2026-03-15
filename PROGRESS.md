@@ -584,6 +584,29 @@
   - [x] Cost Analysis: agent API costs, human seat licenses, human API usage breakdown
   - [x] Empty state when no sources configured
 
+### Prompt A4 — CSV Import
+- [x] `/workspace/import` page:
+  - [x] Downloadable CSV template with expected format
+  - [x] Drag & drop upload zone + file picker
+  - [x] CSV parser with validation (email format, date format)
+  - [x] Preview table showing first 20 rows with valid/invalid indicators
+  - [x] Import: auto-creates workspace_members if not found, upserts human_usage
+  - [x] Results summary (imported, skipped, errors)
+
+### Prompt A5 — Impact Surveys
+- [x] `/workspace/surveys` page:
+  - [x] Surveys table: title, status (draft/active/closed), response count, created date
+  - [x] Create Survey modal:
+    - [x] 3 pre-built templates: AI Impact, Tool Satisfaction, Training Needs
+    - [x] Question builder: 6 types (text, rating, scale, number, single/multi choice)
+    - [x] Anonymous toggle
+    - [x] Add/remove/reorder questions, comma-separated options for choice types
+  - [x] Status management: draft → active → closed
+  - [x] Delete survey with confirmation
+  - [x] Empty state with CTA
+
 ### Navigation & i18n
 - [x] Sidebar: "Workspace" nav item (Globe icon) linking to `/workspace/analytics`
-- [x] Full i18n: `workspace` namespace (~80 keys) in EN + DE
+- [x] Full i18n: `workspace` namespace (~110 keys) in EN + DE
+
+> **Workspace Analytics Phase A COMPLETE** — Sources, Members, Analytics, CSV Import, Surveys all built.
