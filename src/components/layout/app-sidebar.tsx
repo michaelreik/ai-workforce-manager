@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Bot,
+  Users,
   Wallet,
   BarChart3,
   Bell,
@@ -37,6 +38,7 @@ import { useOrg } from "@/components/providers/org-provider";
 const navItems = [
   { key: "dashboard", href: "/dashboard", icon: LayoutDashboard },
   { key: "agents", href: "/agents", icon: Bot },
+  { key: "teams", href: "/teams", icon: Users },
   { key: "budget", href: "/budget", icon: Wallet },
   { key: "analytics", href: "/analytics", icon: BarChart3 },
   { key: "alerts", href: "/alerts", icon: Bell },

@@ -293,3 +293,38 @@
   - [x] Dismissible via X button (persists in localStorage)
 
 > **Phase 7 COMPLETE** — All 21 prompts implemented. MVP is launch-ready.
+
+---
+
+## V2 — Team Management
+
+### Prompt 22 — Full Team Management
+- [x] Database migration (`00002_team_management.sql`):
+  - [x] `color`, `icon`, `lead_user_id`, `updated_at` columns on `teams`
+  - [x] `team_members` table with role constraint (`member`/`lead`), unique(team_id, user_id)
+  - [x] Indexes on `team_members(team_id)`, `team_members(user_id)`, `teams(lead_user_id)`
+  - [x] RLS policy on `team_members` via `user_org_ids()`
+  - [x] `updated_at` trigger on teams
+- [x] TypeScript types: extended `Team` type, added `TeamMember` type
+- [x] i18n: `teams` namespace (~50 keys) in EN + DE, `teams` key in `nav` namespace
+- [x] Sidebar: `Teams` nav item (Users icon) between Agents and Budget
+- [x] Team Card component (`src/components/teams/team-card.tsx`):
+  - [x] Color accent bar, icon, name, description, lead name, agent count, budget progress bar
+  - [x] Edit and View Details action buttons
+- [x] Team Form Modal (`src/components/teams/team-form-modal.tsx`):
+  - [x] Name (required), description, icon picker (12 emojis), color picker (8 presets)
+  - [x] Monthly budget input, team lead select (from org members)
+  - [x] Create and edit modes
+- [x] Teams overview page (`/teams`):
+  - [x] Search filter, responsive card grid, skeleton loading, empty state
+  - [x] Create/Edit via modal, delete with name-confirmation dialog
+  - [x] Audit log entries on create/edit/delete
+- [x] Team detail page (`/teams/[id]`):
+  - [x] Header with back button, color bar, icon, name, edit/delete actions
+  - [x] Stats row: 4 cards (agents, budget, spent, success rate)
+  - [x] Agents tab: agent cards grid, add agent dialog (unassigned agents), remove from team
+  - [x] Members tab: member list with role badges, add/remove members
+  - [x] Budget tab: 30-day cumulative spend area chart (Recharts) with budget limit reference line
+  - [x] Activity tab: audit log timeline (reuses `AgentAuditLogTab`)
+- [x] Seed data updated: team `color`, `icon`, `lead_user_id`; `team_members` rows
+- [x] Build passes (`npm run build`)

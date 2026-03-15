@@ -21,6 +21,18 @@ export type Team = {
   name: string;
   budget_monthly: number;
   description: string | null;
+  color: string;
+  icon: string;
+  lead_user_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TeamMember = {
+  id: string;
+  team_id: string;
+  user_id: string;
+  role: "member" | "lead";
   created_at: string;
 };
 

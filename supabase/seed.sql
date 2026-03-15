@@ -75,10 +75,10 @@ INSERT INTO org_members (org_id, user_id, role) VALUES
 -- ============================================================
 -- 4. Teams
 -- ============================================================
-INSERT INTO teams (id, org_id, name, budget_monthly, description) VALUES
-  ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'Lead Generation', 500.00, 'Automated lead generation and qualification pipeline'),
-  ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', 'Content', 350.00, 'Blog posts, social media, and marketing content creation'),
-  ('10000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001', 'Customer Support', 250.00, 'Ticket handling, email responses, and FAQ updates');
+INSERT INTO teams (id, org_id, name, budget_monthly, description, color, icon, lead_user_id) VALUES
+  ('10000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'Lead Generation', 500.00, 'Automated lead generation and qualification pipeline', '#6366f1', '🎯', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'),
+  ('10000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', 'Content', 350.00, 'Blog posts, social media, and marketing content creation', '#ec4899', '✍️', NULL),
+  ('10000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001', 'Customer Support', 250.00, 'Ticket handling, email responses, and FAQ updates', '#10b981', '💬', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890');
 
 -- ============================================================
 -- 5. Agents
@@ -343,3 +343,10 @@ INSERT INTO audit_log (org_id, user_id, action, target_type, target_id, details,
   ('00000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'budget_changed', 'agent', '20000000-0000-0000-0000-000000000003', '{"field": "max_budget_monthly", "old_value": 250, "new_value": 300}'::jsonb, now() - interval '10 days'),
   ('00000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'model_changed', 'agent', '20000000-0000-0000-0000-000000000001', '{"old_model": "gpt-4o-mini", "new_model": "gpt-4o", "reason": "quality improvement"}'::jsonb, now() - interval '15 days'),
   ('00000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'agent_resumed', 'agent', '20000000-0000-0000-0000-000000000005', '{"reason": "manual"}'::jsonb, now() - interval '8 days');
+
+-- ============================================================
+-- 10. Team Members
+-- ============================================================
+INSERT INTO team_members (team_id, user_id, role) VALUES
+  ('10000000-0000-0000-0000-000000000001', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'lead'),
+  ('10000000-0000-0000-0000-000000000003', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'lead');
