@@ -50,6 +50,7 @@ Management layer for AI agents — budget control, performance tracking, guardra
 - `ENCRYPTION_KEY` — AES-256 key for provider API key encryption (generate: `openssl rand -hex 32`)
 - `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PRO_PRICE_ID` / `STRIPE_ENTERPRISE_PRICE_ID`
 - `RESEND_API_KEY` (optional) / `INTERNAL_API_SECRET` (optional)
+- `CRON_SECRET` — Vercel Cron secret for scheduled sync (auto-set by Vercel)
 - `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` (optional fallback, prefer DB providers)
 
 ## Commands

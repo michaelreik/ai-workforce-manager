@@ -6,6 +6,89 @@ import { createAlert } from "@/lib/alerts";
 import type { UsageSource } from "@/types/database";
 
 /**
+ * GET /api/sync
+ * Cron endpoint — triggered by Vercel Cron every hour.
+ * Syncs all active api_sync sources across all orgs.
+ * Requires CRON_SECRET header for Vercel Cron or x-internal-secret for manual triggers.
+ */
+export async function GET(request: NextRequest) {
+  // Verify cron authorization
+  const cronSecret = request.headers.get("authorization");
+  const internalSecret = request.headers.get("x-internal-secret");
+  const isAuthorized =
+    (process.env.CRON_SECRET && cronSecret === `Bearer ${process.env.CRON_SECRET}`) ||
+    (process.env.INTERNAL_API_SECRET && internalSecret === process.env.INTERNAL_API_SECRET);
+
+  if (!isAuthorized) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const supabase = createServiceClient();
+
+  // Fetch all active api_sync sources across all orgs
+  const { data: sources } = await supabase
+    .from("usage_sources")
+    .select("*")
+    .eq("type", "api_sync")
+    .eq("is_active", true);
+
+  const sourcesToSync = (sources || []) as UsageSource[];
+
+  if (sourcesToSync.length === 0) {
+    return NextResponse.json({ message: "No sources to sync", synced: 0 });
+  }
+
+  const results: Array<{
+    sourceId: string;
+    sourceName: string;
+    orgId: string;
+    success: boolean;
+    errors: string[];
+  }> = [];
+
+  for (const source of sourcesToSync) {
+    const provider = getSyncProvider(supabase, source);
+    if (!provider) {
+      results.push({
+        sourceId: source.id,
+        sourceName: source.name,
+        orgId: source.org_id,
+        success: false,
+        errors: [`No sync provider for: ${source.provider}`],
+      });
+      continue;
+    }
+
+    const result = await provider.run();
+    results.push({
+      sourceId: source.id,
+      sourceName: source.name,
+      orgId: source.org_id,
+      success: result.success,
+      errors: result.errors,
+    });
+
+    // Alert on failure
+    if (!result.success) {
+      await createAlert({
+        supabase,
+        org_id: source.org_id,
+        type: "error_spike",
+        severity: "warning",
+        message: `Scheduled sync failed for "${source.name}": ${result.errors[0] || "Unknown error"}`,
+      });
+    }
+  }
+
+  return NextResponse.json({
+    synced: results.filter((r) => r.success).length,
+    failed: results.filter((r) => !r.success).length,
+    total: sourcesToSync.length,
+    results,
+  });
+}
+
+/**
  * POST /api/sync
  * Triggers a sync for one or all usage sources.
  *

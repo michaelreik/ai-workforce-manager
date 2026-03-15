@@ -46,7 +46,9 @@ import {
   Square,
   BarChart3,
   Loader2,
+  Eye,
 } from "lucide-react";
+import Link from "next/link";
 import type { Survey, SurveyQuestion, SurveyResponse } from "@/types/database";
 
 const SURVEY_TEMPLATES = {
@@ -271,6 +273,11 @@ export default function SurveysPage() {
                         {survey.status === "active" && (
                           <Button variant="ghost" size="xs" onClick={() => handleStatusChange(survey.id, "closed")}>
                             <Square className="h-3 w-3" />
+                          </Button>
+                        )}
+                        {survey.responseCount > 0 && (
+                          <Button variant="ghost" size="xs" render={<Link href={`/workspace/surveys/${survey.id}`} />}>
+                            <Eye className="h-3 w-3" />
                           </Button>
                         )}
                         <Button variant="ghost" size="xs" onClick={() => handleDelete(survey.id)}>

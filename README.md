@@ -1,166 +1,213 @@
-# AI Workforce Manager
+# OpenManage AI
 
-Management layer for AI agents — budget control, performance tracking, guardrails, and kill switches. Built as a multi-tenant SaaS.
+> The management layer for AI agents and AI workforce governance. Budget control, performance tracking, kill switches, and workspace analytics — built for managers, not engineers.
+
+[![CI](https://github.com/michaelreik/ai-workforce-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/michaelreik/ai-workforce-manager/actions/workflows/ci.yml)
+
+## What is OpenManage AI?
+
+OpenManage AI gives you full visibility and control over your organization's AI usage — both automated agents and human employees using tools like ChatGPT, Claude, and GitHub Copilot.
+
+**For AI Agents:**
+- 🔌 OpenAI-compatible proxy — change 2 lines of code to start tracking
+- 💰 Budget control per agent, team, and organization
+- 🛑 Kill switch & guardrails — stop runaway agents instantly
+- 📊 ROI tracking — cost per lead, cost per article, real business metrics
+
+**For Workspace Analytics:**
+- 👥 Track AI usage across ChatGPT, Claude, Copilot, Cursor, and more
+- 📈 Adoption dashboards — who uses what, how much, and for what
+- 💡 Seat optimization — find unused licenses and save money
+- 📋 Impact surveys — measure how AI affects productivity
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| Agent Management | CRUD, status control, templates, team assignment |
+| API Proxy | OpenAI-compatible, transparent, supports streaming |
+| Budget Control | Per-agent, per-team, per-org with auto-pause |
+| Kill Switch | Emergency stop, spike detection, guardrails |
+| Analytics & ROI | Cost tracking, model comparison, optimization recommendations |
+| Workspace Analytics | Unified dashboard for all AI tool usage |
+| Team Management | Organize agents and members into teams |
+| Provider Management | Multi-provider support with health checks and failover |
+| Alert System | Real-time alerts, email notifications, daily digest |
+| Impact Surveys | Customizable surveys to measure AI adoption impact |
+| Seat Optimization | Detect unused/underutilized licenses, save costs |
+| Adoption Playbook | Score, champions program, stage-based guidance |
+| Multi-Tenant | Organization-scoped with RLS from day 1 |
+| i18n | English + German |
+| Payments | Stripe integration (Free / Pro / Enterprise) |
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router, Turbopack)
-- **UI:** Tailwind CSS v4 + shadcn/ui (base-nova style)
-- **Database:** Supabase (PostgreSQL + Auth + Realtime + RLS)
+- **Framework:** Next.js 16 (App Router)
+- **UI:** Tailwind CSS v4 + shadcn/ui
+- **Database:** Supabase (PostgreSQL + Auth + Realtime)
 - **Charts:** Recharts
 - **Payments:** Stripe
 - **Email:** Resend
-- **i18n:** English + German
+- **Deployment:** Docker + Kubernetes
 
-## Prerequisites
+## Quick Start
+
+### Prerequisites
 
 - Node.js 20+
-- [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) (`brew install supabase/tap/supabase`)
-- Docker (required by Supabase local development)
+- Supabase project ([supabase.com](https://supabase.com))
+- npm
 
-## Setup
-
-### 1. Install dependencies
+### Setup
 
 ```bash
-npm install
-```
+# Clone
+git clone https://github.com/michaelreik/ai-workforce-manager.git
+cd ai-workforce-manager
 
-### 2. Environment variables
+# Install dependencies
+npm ci
 
-```bash
-cp .env.example .env.local
-```
+# Configure environment
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase credentials
 
-Fill in `.env.local`:
+# Run database migrations
+npx supabase db push
 
-| Variable | Required | Description |
-|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL (local: `http://127.0.0.1:54321`) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role key (server-side only) |
-| `NEXT_PUBLIC_APP_URL` | Yes | App URL (local: `http://localhost:3000`) |
-| `ENCRYPTION_KEY` | Yes | AES-256 key for provider API key encryption |
-| `OPENAI_API_KEY` | No | Fallback OpenAI key (prefer DB providers) |
-| `ANTHROPIC_API_KEY` | No | Fallback Anthropic key (prefer DB providers) |
-| `STRIPE_SECRET_KEY` | No | Stripe secret key for billing |
-| `STRIPE_WEBHOOK_SECRET` | No | Stripe webhook signing secret |
-| `STRIPE_PRO_PRICE_ID` | No | Stripe price ID for Pro plan |
-| `STRIPE_ENTERPRISE_PRICE_ID` | No | Stripe price ID for Enterprise plan |
-| `RESEND_API_KEY` | No | Resend API key for email notifications |
-| `RESEND_FROM_EMAIL` | No | Sender email address |
-| `INTERNAL_API_SECRET` | No | Secret for server-to-server API calls (alert emails, digest) |
+# Seed demo data (optional)
+npm run seed
 
-Generate an encryption key:
-
-```bash
-openssl rand -hex 32
-```
-
-### 3. Start Supabase locally
-
-```bash
-supabase start
-```
-
-This prints your local `anon key` and `service_role key` — copy them into `.env.local`.
-
-### 4. Run migrations and seed data
-
-```bash
-supabase db reset
-```
-
-This applies all migrations from `supabase/migrations/` and runs `supabase/seed.sql`, which creates:
-
-- 1 demo organization ("Acme AI Corp")
-- 3 teams with color/icon customization
-- 6 agents across teams
-- 530 tasks spread across 30 days
-- 5 alerts (budget warnings, errors, kill-switch)
-- Demo user: `demo@acme-ai.com` / `demo1234`
-
-### 5. Start the dev server
-
-```bash
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Log in with the demo credentials or create a new account.
+Open [http://localhost:3000](http://localhost:3000). Demo login: `demo@acme-ai.com` / `demo1234`
 
-## Scripts
+### Environment Variables
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start dev server (Turbopack) |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run tests (Vitest) |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run seed` | Reset DB and re-seed (`supabase db reset`) |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Supabase service role key |
+| `ENCRYPTION_KEY` | ✅ | AES-256 key for provider key encryption (`openssl rand -hex 32`) |
+| `STRIPE_SECRET_KEY` | Optional | Stripe secret key |
+| `STRIPE_WEBHOOK_SECRET` | Optional | Stripe webhook signing secret |
+| `RESEND_API_KEY` | Optional | Resend API key for email notifications |
+| `INTERNAL_API_SECRET` | Optional | Secret for internal API routes (cron, sync) |
+| `CRON_SECRET` | Optional | Vercel Cron secret (auto-set by Vercel) |
+
+## How the Proxy Works
+
+```
+Your Agent → OpenManage AI Proxy → LLM Provider (OpenAI, Anthropic)
+               ↓
+         Budget Check
+         Rate Limiting
+         Token Tracking
+         Cost Recording
+         Spike Detection
+```
+
+**Integration — 2 lines of code:**
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="awm_sk_your_key_here",                    # ← OpenManage API key
+    base_url="https://openmanage.ai/api/v1"            # ← Proxy URL
+)
+
+# Everything else stays the same
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
 
 ## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── (auth)/          # Login, signup pages
-│   ├── (dashboard)/     # Authenticated dashboard routes
-│   │   ├── agents/      # Agent overview + detail pages
-│   │   ├── teams/       # Team overview + detail pages
-│   │   ├── budget/      # Budget overview + allocation
-│   │   ├── analytics/   # Analytics dashboard (cost, performance, ROI)
-│   │   ├── alerts/      # Alert management
-│   │   ├── settings/    # Org settings, API keys, providers, integration
-│   │   └── profile/     # User profile settings
-│   ├── api/             # API routes (proxy, providers, keys, stripe, alerts)
-│   ├── docs/            # Public help center
-│   └── onboarding/      # Guided onboarding wizard
-├── components/
-│   ├── layout/          # Sidebar, header, breadcrumbs
-│   ├── providers/       # Context providers (auth, org, theme, i18n)
-│   ├── ui/              # shadcn/ui components
-│   ├── agents/          # Agent-specific components
-│   ├── teams/           # Team-specific components
-│   └── landing/         # Landing page
-├── hooks/               # Custom hooks (useRealtime)
-├── i18n/                # Translations (en.json, de.json)
-├── lib/                 # Utilities (supabase, stripe, crypto, email, rate-limiter)
-└── types/               # TypeScript types
-supabase/
-├── migrations/          # SQL migrations (00001–00006)
-└── seed.sql             # Demo data
+│   ├── (auth)/              # Login, signup
+│   ├── (dashboard)/         # Authenticated pages
+│   │   ├── agents/          # Agent management
+│   │   ├── teams/           # Team management
+│   │   ├── budget/          # Budget allocation
+│   │   ├── analytics/       # Agent analytics & ROI
+│   │   ├── alerts/          # Alert management
+│   │   ├── workspace/       # Workspace analytics
+│   │   │   ├── analytics/   # Unified AI dashboard
+│   │   │   ├── sources/     # Usage sources
+│   │   │   ├── members/     # Employee directory
+│   │   │   ├── surveys/     # Impact surveys
+│   │   │   ├── optimization/# Seat optimization
+│   │   │   └── adoption/    # Adoption playbook
+│   │   ├── settings/        # Org settings, providers, API keys
+│   │   └── profile/         # User profile
+│   ├── api/
+│   │   ├── v1/chat/completions/  # The proxy
+│   │   ├── sync/            # Provider data sync
+│   │   ├── providers/       # Provider management
+│   │   └── webhooks/        # Stripe webhooks
+│   ├── docs/                # Public help center
+│   └── onboarding/          # Guided setup
+├── components/              # React components
+├── lib/
+│   ├── sync/                # Provider sync framework
+│   ├── crypto.ts            # AES-256-GCM encryption
+│   ├── rate-limiter.ts      # In-memory rate limiting
+│   ├── pricing.ts           # Model pricing table
+│   └── supabase/            # Supabase clients
+├── i18n/                    # Internationalization (EN + DE)
+└── types/                   # TypeScript types
 ```
 
-## Key Features
+## Testing
 
-- **Agent Management** — Create, configure, and monitor AI agents with guardrails
-- **OpenAI-compatible Proxy** — `POST /api/v1/chat/completions` with budget enforcement, rate limiting, and token tracking
-- **Budget Control** — Org, team, and per-agent budgets with real-time tracking and alerts
-- **Kill Switch** — Emergency pause all agents, spike detection with auto-pause
-- **Analytics & ROI** — Cost analysis, model comparison, per-agent ROI calculation
-- **Real-time Updates** — Supabase Realtime for live alert counts, agent status changes
-- **Multi-tenant** — RLS-enforced org isolation, org switcher, role-based access
-- **Provider Management** — Store multiple LLM provider keys (encrypted), health checks, fallback
-- **Stripe Billing** — Free / Pro / Enterprise plans with usage limits
-- **Email Alerts** — Critical alert emails and daily digest via Resend
-- **i18n** — English and German, extensible
+```bash
+npm run test           # Run all tests
+npm run test:watch     # Watch mode
+npm run test:coverage  # With coverage report
+```
 
-## Stripe Setup (optional)
-
-1. Create products and prices in the [Stripe Dashboard](https://dashboard.stripe.com)
-2. Set `STRIPE_SECRET_KEY`, `STRIPE_PRO_PRICE_ID`, `STRIPE_ENTERPRISE_PRICE_ID` in `.env.local`
-3. For local webhook testing: `stripe listen --forward-to localhost:3000/api/webhooks/stripe`
-4. Set the webhook signing secret as `STRIPE_WEBHOOK_SECRET`
+86 tests across 6 suites: Pricing, Rate Limiter, Crypto, Proxy Route, Stripe Webhook, Provider Health.
 
 ## Deployment
 
-Deploy to [Vercel](https://vercel.com) with a hosted Supabase project:
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for the complete Kubernetes deployment guide.
 
-1. Create a [Supabase project](https://supabase.com/dashboard)
-2. Link locally: `supabase link --project-ref <ref>`
-3. Push migrations: `supabase db push`
-4. Set all environment variables in Vercel
-5. Deploy: `vercel --prod`
+```bash
+# Docker build
+docker build -t openmanage-ai .
+
+# Deploy to staging
+./scripts/deploy.sh staging
+
+# Deploy to production
+./scripts/deploy.sh production v1.0.0
+```
+
+## Supported Models
+
+| Model | Provider | Input ($/1M tokens) | Output ($/1M tokens) |
+|-------|----------|---------------------|----------------------|
+| gpt-4o | OpenAI | $2.50 | $10.00 |
+| gpt-4o-mini | OpenAI | $0.15 | $0.60 |
+| o3-mini | OpenAI | $1.10 | $4.40 |
+| claude-opus | Anthropic | $15.00 | $75.00 |
+| claude-sonnet | Anthropic | $3.00 | $15.00 |
+| claude-haiku | Anthropic | $0.25 | $1.25 |
+| gemini-pro | Google | $1.25 | $5.00 |
+| gemini-flash | Google | $0.075 | $0.30 |
+
+## License
+
+Private — All rights reserved.
+
+---
+
+Built with 👻 by [OpenManage AI](https://openmanage.ai)

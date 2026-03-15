@@ -668,3 +668,38 @@
 - [x] Full i18n: ~45 optimization + adoption keys in EN + DE
 
 > **Workspace Analytics Phase C COMPLETE — All 3 phases done.**
+
+---
+
+## Polish & Fixes
+
+### README
+- [x] Complete project README replacing Next.js default
+  - [x] Product description, features table, tech stack
+  - [x] Quick start guide with setup steps
+  - [x] Environment variables reference
+  - [x] Proxy integration example (2 lines of code)
+  - [x] Project structure overview
+  - [x] Supported models with pricing
+  - [x] Testing and deployment commands
+
+### Survey Results Visualization
+- [x] `/workspace/surveys/[id]` — full survey results page:
+  - [x] Summary cards: responses, questions, response rate, anonymous status
+  - [x] Per-question result visualization:
+    - [x] Rating: bar chart with distribution + average score
+    - [x] Scale/Likert: progress bars with percentages per option
+    - [x] Single/Multi Choice: pie chart + legend with counts
+    - [x] Number: average, median, min, max stats
+    - [x] Free text: quoted responses list with show more
+  - [x] CSV export button (downloads all responses)
+  - [x] Empty state for surveys with no responses
+  - [x] "View Results" button on surveys list (eye icon, shows when responses > 0)
+
+### Scheduled Sync (Vercel Cron)
+- [x] `GET /api/sync` — cron endpoint for Vercel scheduled invocations
+  - [x] Authorized via `CRON_SECRET` (Vercel) or `x-internal-secret`
+  - [x] Syncs all active api_sync sources across all orgs
+  - [x] Creates alerts on sync failure
+- [x] `vercel.json` — cron schedule: every hour (`0 * * * *`)
+- [x] `CRON_SECRET` documented in CLAUDE.md and README
