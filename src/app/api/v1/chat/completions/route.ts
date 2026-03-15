@@ -114,13 +114,20 @@ async function forwardToOpenAI(
   apiKey: string,
   stream: boolean
 ) {
+  const requestBody: Record<string, unknown> = { ...body, model };
+
+  // Inject stream_options to get usage data in the final SSE chunk
+  if (stream) {
+    requestBody.stream_options = { include_usage: true };
+  }
+
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({ ...body, model }),
+    body: JSON.stringify(requestBody),
   });
   return res;
 }
@@ -759,24 +766,108 @@ export async function POST(request: NextRequest) {
 
   // 9. Handle streaming response
   if (isStream && providerResponse.body) {
-    // For streaming, pass through the response and record usage after
-    // We can't easily extract token counts from streaming, so we estimate
-    const responseStream = providerResponse.body;
+    const streamProvider = provider || getProvider(usedModel);
+    const { readable, writable } = new TransformStream();
+    const writer = writable.getWriter();
+    const extractedUsage = { input: 0, output: 0 };
 
-    // Record a placeholder task (tokens will be approximate)
-    const durationMs = Date.now() - startTime;
-    recordUsage(
-      supabase,
-      agent.org_id,
-      agent.id,
-      usedModel,
-      0, // Can't know until stream completes
-      0,
-      durationMs,
-      "completed"
-    );
+    // Estimate input tokens from request body as fallback
+    const inputText = JSON.stringify(body.messages || "");
+    const estimatedInputTokens = Math.ceil(inputText.length / 4);
 
-    return new Response(responseStream, {
+    // Process stream in background: forward chunks to client AND extract usage
+    const orgId = agent.org_id;
+    const agentId = agent.id;
+    const agentName = agent.name;
+    const guardrails = agent.guardrails;
+
+    (async () => {
+      const reader = providerResponse.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let outputChars = 0;
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          // Forward chunk immediately — no latency added
+          await writer.write(value);
+
+          // Parse for usage data
+          const chunk = decoder.decode(value, { stream: true });
+          buffer += chunk;
+
+          // Process complete SSE lines
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || ""; // Keep incomplete line in buffer
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ") || line === "data: [DONE]") continue;
+
+            try {
+              const data = JSON.parse(line.slice(6));
+
+              if (streamProvider === "openai") {
+                // OpenAI: final chunk has usage when stream_options.include_usage is set
+                if (data.usage) {
+                  extractedUsage.input = data.usage.prompt_tokens || 0;
+                  extractedUsage.output = data.usage.completion_tokens || 0;
+                }
+                // Count output chars for estimation fallback
+                const content = data.choices?.[0]?.delta?.content;
+                if (content) outputChars += content.length;
+              } else if (streamProvider === "anthropic") {
+                // Anthropic: message_start has input tokens
+                if (data.type === "message_start" && data.message?.usage) {
+                  extractedUsage.input = data.message.usage.input_tokens || 0;
+                }
+                // Anthropic: message_delta has output tokens
+                if (data.type === "message_delta" && data.usage) {
+                  extractedUsage.output = data.usage.output_tokens || 0;
+                }
+                // Count output chars for estimation fallback
+                if (data.type === "content_block_delta" && data.delta?.text) {
+                  outputChars += data.delta.text.length;
+                }
+              }
+            } catch {
+              // Ignore unparseable lines
+            }
+          }
+        }
+      } finally {
+        await writer.close();
+
+        // Use extracted usage, or estimate from char counts
+        const finalInput = extractedUsage.input || estimatedInputTokens;
+        const finalOutput = extractedUsage.output || Math.ceil(outputChars / 4);
+        const durationMs = Date.now() - startTime;
+
+        const cost = await recordUsage(
+          supabase,
+          orgId,
+          agentId,
+          usedModel,
+          finalInput,
+          finalOutput,
+          durationMs,
+          "completed"
+        );
+
+        await checkSpikeDetection(
+          supabase,
+          orgId,
+          agentId,
+          agentName,
+          cost,
+          guardrails
+        );
+      }
+    })();
+
+    return new Response(readable, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
