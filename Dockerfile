@@ -12,9 +12,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build args for public env vars (needed at build time for Next.js)
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-ARG NEXT_PUBLIC_APP_URL
+# Defaults prevent build failures when args are not provided
+ARG NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder-for-build
+ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
