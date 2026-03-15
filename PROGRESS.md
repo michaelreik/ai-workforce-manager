@@ -386,3 +386,11 @@
   - [x] Fallback model key resolution also uses DB → env var chain
 - [x] Settings page: added Providers quick-link card (3-column grid)
 - [x] Full i18n: `providers` namespace (~35 keys) in EN + DE
+
+### Bug Fix — Streaming Token Tracking
+- [x] Fixed `stream: true` requests logging `tokens_input=0`, `tokens_output=0`
+- [x] OpenAI: inject `stream_options: { include_usage: true }` to get usage in final SSE chunk
+- [x] Anthropic: parse `message_start` (input tokens) and `message_delta` (output tokens) events
+- [x] TransformStream forwards chunks to client with zero latency while extracting usage in background
+- [x] Fallback char-based estimation (1 token ≈ 4 chars) if extraction fails
+- [x] `recordUsage()` + `checkSpikeDetection()` now run AFTER stream completes with actual token counts
