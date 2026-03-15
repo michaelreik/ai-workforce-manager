@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
 import { useTranslations } from "@/i18n/use-translations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,6 +61,7 @@ const THEME_OPTIONS = [
 export default function ProfilePage() {
   const { t } = useTranslations("profile");
   const { t: tCommon } = useTranslations("common");
+  const { setTheme } = useTheme();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -127,6 +129,8 @@ export default function ProfilePage() {
             two_factor_enabled: p.two_factor_enabled,
             notification_prefs: p.notification_prefs,
           });
+          // Sync theme with next-themes
+          setTheme(p.theme);
         } else {
           // Create default profile
           await supabase.from("user_profiles").insert({
@@ -166,17 +170,6 @@ export default function ProfilePage() {
         .eq("user_id", user.id);
 
       if (error) throw error;
-
-      // Apply theme change
-      const html = document.documentElement;
-      if (profile.theme === "system") {
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        html.className = prefersDark ? "dark" : "";
-      } else {
-        html.className = profile.theme === "dark" ? "dark" : "";
-      }
 
       toast.success(t("saved"));
     } catch (err) {
@@ -330,9 +323,10 @@ export default function ProfilePage() {
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() =>
-                      updateProfile("theme", option.value as typeof profile.theme)
-                    }
+                    onClick={() => {
+                      updateProfile("theme", option.value as typeof profile.theme);
+                      setTheme(option.value);
+                    }}
                     className={`flex items-center gap-2 rounded-md border px-4 py-2 text-sm transition-colors ${
                       isActive
                         ? "border-primary bg-primary/10 text-foreground"
