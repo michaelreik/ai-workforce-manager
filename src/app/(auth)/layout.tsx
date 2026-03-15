@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { TranslationProvider } from "@/components/providers/translation-provider";
 import { defaultLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/get-messages";

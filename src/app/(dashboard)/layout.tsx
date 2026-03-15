@@ -1,3 +1,6 @@
+// Force dynamic rendering for all dashboard routes — they require Supabase auth
+export const dynamic = "force-dynamic";
+
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppHeaderClient } from "@/components/layout/app-header-client";
