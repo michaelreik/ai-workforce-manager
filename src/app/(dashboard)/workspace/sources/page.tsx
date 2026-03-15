@@ -72,6 +72,7 @@ export default function SourcesPage() {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
 
   // Form state
   const [formProvider, setFormProvider] = useState("openai");
@@ -244,6 +245,52 @@ export default function SourcesPage() {
                   </div>
 
                   <div className="flex items-center gap-1.5 pt-1">
+                    {source.type === "api_sync" && (
+                      <Button
+                        variant="outline"
+                        size="xs"
+                        disabled={syncingId === source.id}
+                        onClick={async () => {
+                          setSyncingId(source.id);
+                          try {
+                            const res = await fetch("/api/sync", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ source_id: source.id }),
+                            });
+                            const data = await res.json();
+                            if (data.results?.[0]?.success) {
+                              toast.success(t("syncSuccess"));
+                              setSources((prev) =>
+                                prev.map((s) =>
+                                  s.id === source.id
+                                    ? { ...s, sync_status: "success" as const, last_sync_at: new Date().toISOString() }
+                                    : s
+                                )
+                              );
+                            } else {
+                              toast.error(t("syncError"));
+                              setSources((prev) =>
+                                prev.map((s) =>
+                                  s.id === source.id ? { ...s, sync_status: "error" as const } : s
+                                )
+                              );
+                            }
+                          } catch {
+                            toast.error(t("syncError"));
+                          } finally {
+                            setSyncingId(null);
+                          }
+                        }}
+                      >
+                        {syncingId === source.id ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <RefreshCw className="h-3 w-3" />
+                        )}
+                        {t("syncNow")}
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="xs"

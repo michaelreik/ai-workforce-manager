@@ -610,3 +610,35 @@
 - [x] Full i18n: `workspace` namespace (~110 keys) in EN + DE
 
 > **Workspace Analytics Phase A COMPLETE** — Sources, Members, Analytics, CSV Import, Surveys all built.
+
+## Workspace Analytics — Phase B (API Sync)
+
+### Prompt B3 — Generic Sync Framework
+- [x] `src/lib/sync/base-sync.ts` — abstract `ProviderSync` class:
+  - [x] `fetchUsers()` and `fetchUsageData()` abstract methods
+  - [x] `run()` orchestrator: updates sync_status, syncs users → workspace_members, syncs usage → human_usage (upsert), handles errors
+- [x] `src/lib/sync/index.ts` — factory `getSyncProvider()` maps provider name to implementation
+
+### Prompt B1 — OpenAI Admin API Sync
+- [x] `src/lib/sync/openai-sync.ts`:
+  - [x] Fetches `/v1/organization/users` for user mapping
+  - [x] Fetches `/v1/organization/usage` for per-user and aggregate usage data
+  - [x] Handles multiple response formats (per-user results, line items)
+
+### Prompt B2 — GitHub Copilot Sync
+- [x] `src/lib/sync/github-copilot-sync.ts`:
+  - [x] Fetches `/orgs/{org}/copilot/usage` for suggestions/acceptances per user
+  - [x] Fetches `/orgs/{org}/copilot/billing/seats` for seat info
+  - [x] Maps Copilot metrics to human_usage (suggestions → messages, coding category)
+
+### Anthropic Sync (stub)
+- [x] `src/lib/sync/anthropic-sync.ts` — stub implementation, limited API
+
+### Sync API Route
+- [x] `POST /api/sync` — triggers sync for one source or all active api_sync sources
+  - [x] Auth: authenticated admin/owner OR x-internal-secret (for cron)
+  - [x] Sequential execution to avoid rate limiting
+  - [x] Alert on repeated sync failures
+- [x] "Sync Now" button on sources page (for api_sync type sources)
+
+> **Workspace Analytics Phase B COMPLETE**
