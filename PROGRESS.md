@@ -669,6 +669,12 @@
 
 > **Workspace Analytics Phase C COMPLETE — All 3 phases done.**
 
+### Workspace Analytics — Remaining (V3)
+- [ ] Survey taking UI — public-facing page for employees to fill out surveys (email link / in-app)
+- [ ] Plan gate enforcement — restrict Workspace features to Pro+/Enterprise plans
+- [ ] SCIM integration — auto-sync members from Azure AD, Okta, Google Workspace
+- [ ] Workspace Assistants UI — manage/track custom GPTs and bots (table exists, no UI yet)
+
 ---
 
 ## Polish & Fixes
