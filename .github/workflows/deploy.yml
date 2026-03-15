@@ -95,6 +95,7 @@ jobs:
           envsubst < k8s/staging/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/staging/service.yml
           kubectl apply -f k8s/staging/ingress.yml
+          kubectl -n openmanage-staging rollout restart deployment/openmanage-ai
           kubectl -n openmanage-staging rollout status deployment/openmanage-ai --timeout=120s
 
   deploy-production:
@@ -133,4 +134,5 @@ jobs:
           envsubst < k8s/production/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/production/service.yml
           kubectl apply -f k8s/production/ingress.yml
+          kubectl -n openmanage-production rollout restart deployment/openmanage-ai
           kubectl -n openmanage-production rollout status deployment/openmanage-ai --timeout=180s

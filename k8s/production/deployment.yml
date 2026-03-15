@@ -26,6 +26,7 @@ spec:
       containers:
         - name: openmanage-ai
           image: ${DOCKER_IMAGE}:${IMAGE_TAG}
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
               protocol: TCP
