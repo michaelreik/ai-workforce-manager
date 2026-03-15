@@ -194,6 +194,40 @@ export default function SettingsPage() {
     toast.success(t("memberRemoved"));
   }
 
+  // --- Billing handlers ---
+  async function handleUpgrade(plan: string) {
+    if (plan === "free") return;
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error || t("saveFailed"));
+      }
+    } catch {
+      toast.error(t("saveFailed"));
+    }
+  }
+
+  async function handleManageBilling() {
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error || t("saveFailed"));
+      }
+    } catch {
+      toast.error(t("saveFailed"));
+    }
+  }
+
   // --- Notifications handler ---
   async function handleSaveNotifications() {
     setSavingNotif(true);
@@ -541,6 +575,12 @@ export default function SettingsPage() {
                 <Badge className="capitalize text-sm px-3 py-1">
                   {currentOrg?.plan || "free"}
                 </Badge>
+                {currentOrg?.plan === "pro" && (
+                  <span className="text-sm text-muted-foreground">$49/mo</span>
+                )}
+                {currentOrg?.plan === "enterprise" && (
+                  <span className="text-sm text-muted-foreground">$199/mo</span>
+                )}
               </div>
 
               <Separator />
@@ -576,16 +616,93 @@ export default function SettingsPage() {
 
               <Separator />
 
-              <div className="flex gap-2">
-                <Button size="sm" disabled>
-                  {t("upgrade")}
-                </Button>
-                <span className="text-xs text-muted-foreground self-center">
-                  {t("stripeComingSoon")}
-                </span>
+              <div className="flex gap-2 flex-wrap">
+                {currentOrg?.plan !== "enterprise" && (
+                  <>
+                    {currentOrg?.plan !== "pro" && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleUpgrade("pro")}
+                      >
+                        {t("upgradeTo", { plan: "Pro — $49/mo" })}
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant={currentOrg?.plan === "pro" ? "default" : "outline"}
+                      onClick={() => handleUpgrade("enterprise")}
+                    >
+                      {t("upgradeTo", { plan: "Enterprise — $199/mo" })}
+                    </Button>
+                  </>
+                )}
+                {currentOrg?.plan !== "free" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleManageBilling}
+                  >
+                    {t("manageBilling")}
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
+
+          {/* Pricing comparison */}
+          {currentOrg?.plan === "free" && (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {(["free", "pro", "enterprise"] as const).map((plan) => {
+                const prices = { free: 0, pro: 49, enterprise: 199 };
+                const agentLimits = { free: "3", pro: "20", enterprise: t("unlimited") };
+                const requestLimits = { free: "1,000", pro: "50,000", enterprise: t("unlimited") };
+                const isCurrent = currentOrg?.plan === plan;
+
+                return (
+                  <Card
+                    key={plan}
+                    className={isCurrent ? "border-primary" : ""}
+                  >
+                    <CardContent className="py-5 space-y-3">
+                      <div>
+                        <p className="font-semibold capitalize">{plan}</p>
+                        <p className="text-2xl font-bold">
+                          ${prices[plan]}
+                          <span className="text-sm font-normal text-muted-foreground">
+                            /mo
+                          </span>
+                        </p>
+                      </div>
+                      <Separator />
+                      <ul className="space-y-1.5 text-xs text-muted-foreground">
+                        <li>{agentLimits[plan]} {t("planAgents").toLowerCase()}</li>
+                        <li>{requestLimits[plan]} {t("planRequests").toLowerCase()}</li>
+                        <li>
+                          {plan === "free" ? "1" : t("unlimited")}{" "}
+                          {t("planTeams").toLowerCase()}
+                        </li>
+                      </ul>
+                      {isCurrent ? (
+                        <Badge variant="secondary" className="w-full justify-center">
+                          {t("currentLabel")}
+                        </Badge>
+                      ) : (
+                        <Button
+                          size="sm"
+                          className="w-full"
+                          variant={plan === "enterprise" ? "outline" : "default"}
+                          onClick={() => handleUpgrade(plan)}
+                          disabled={plan === "free"}
+                        >
+                          {t("upgrade")}
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </TabsContent>
 
         {/* ===== Notifications Tab ===== */}

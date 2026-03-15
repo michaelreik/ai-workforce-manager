@@ -396,6 +396,9 @@
     "testConnection": "Verbindung testen",
     "testing": "Teste...",
     "codeSnippets": "Code-Snippets",
-    "copied": "In Zwischenablage kopiert"
+    "copied": "In Zwischenablage kopiert",
+    "upgradeTo": "Upgrade auf {plan}",
+    "manageBilling": "Abrechnung verwalten",
+    "currentLabel": "Aktueller Plan"
   }
 }

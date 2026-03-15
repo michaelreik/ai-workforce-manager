@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/service";
 import { calculateCost, getProvider, MODEL_PRICING } from "@/lib/pricing";
 import { createAlert } from "@/lib/alerts";
+import { getPlanLimits, type PlanId } from "@/lib/stripe";
 import crypto from "crypto";
 import type { Agent, BudgetEntry, Guardrails } from "@/types/database";
 
@@ -528,7 +529,42 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 5. Check guardrails
+  // 5. Check plan request limits
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("plan")
+    .eq("id", agent.org_id)
+    .single();
+
+  if (org) {
+    const limits = getPlanLimits((org.plan || "free") as PlanId);
+    if (limits.maxRequests !== Infinity) {
+      const monthStart = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+      ).toISOString();
+      const { count } = await supabase
+        .from("tasks")
+        .select("id", { count: "exact", head: true })
+        .eq("org_id", agent.org_id)
+        .gte("started_at", monthStart);
+
+      if (count && count >= limits.maxRequests) {
+        return NextResponse.json(
+          {
+            error: {
+              message: `Plan limit reached: ${limits.maxRequests} requests/month on ${limits.name} plan. Upgrade for more.`,
+              type: "plan_limit",
+            },
+          },
+          { status: 429 }
+        );
+      }
+    }
+  }
+
+  // 6. Check guardrails
   const guardrails = agent.guardrails;
 
   // Token limit check

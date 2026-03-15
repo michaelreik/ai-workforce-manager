@@ -396,6 +396,9 @@
     "testConnection": "Test Connection",
     "testing": "Testing...",
     "codeSnippets": "Code Snippets",
-    "copied": "Copied to clipboard"
+    "copied": "Copied to clipboard",
+    "upgradeTo": "Upgrade to {plan}",
+    "manageBilling": "Manage Billing",
+    "currentLabel": "Current Plan"
   }
 }

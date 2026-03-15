@@ -245,9 +245,20 @@
 - [x] Full i18n (en + de)
 
 ### Prompt 19 — Stripe Integration
-- [ ] Stripe Checkout for plan upgrades
-- [ ] Webhook endpoint for subscription events
-- [ ] Plan limit enforcement
+- [x] `src/lib/stripe.ts` — Stripe client (lazy init), plan config with limits
+- [x] `POST /api/stripe/checkout` — creates Checkout session for Pro/Enterprise upgrades
+  - [x] Creates/reuses Stripe customer, stores `stripe_customer_id` on org
+  - [x] Success/cancel redirects back to billing tab
+- [x] `POST /api/stripe/portal` — creates Customer Portal session for managing subscription
+- [x] `POST /api/webhooks/stripe` — handles subscription lifecycle events:
+  - [x] `checkout.session.completed` → update org plan + audit log
+  - [x] `customer.subscription.updated` → plan change detection + audit log
+  - [x] `customer.subscription.deleted` → downgrade to free + audit log
+  - [x] `invoice.payment_failed` → critical alert to org admins
+- [x] Plan limit enforcement in proxy (request count per month, 429 on limit)
+- [x] Billing tab updated: upgrade buttons, manage billing link, pricing comparison cards
+- [x] i18n keys (en + de)
+- Requires env vars: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_ENTERPRISE_PRICE_ID`
 
 ### Prompt 20 — Landing Page
 - [x] Public landing page at `/`
@@ -281,4 +292,4 @@
   - [x] Auto-dismisses when all steps complete
   - [x] Dismissible via X button (persists in localStorage)
 
-> **Phase 7 MOSTLY COMPLETE** — Only Stripe integration (Prompt 19) remaining.
+> **Phase 7 COMPLETE** — All 21 prompts implemented. MVP is launch-ready.
