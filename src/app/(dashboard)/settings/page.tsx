@@ -101,24 +101,31 @@ export default function SettingsPage() {
 
     async function fetchMembers() {
       setLoadingMembers(true);
-      const { data: memberships } = await supabase
-        .from("org_members")
-        .select("id, user_id, role, created_at")
-        .eq("org_id", currentOrg!.id)
-        .order("created_at");
 
-      if (!memberships) {
+      const [membershipsRes, profilesRes] = await Promise.all([
+        supabase
+          .from("org_members")
+          .select("id, user_id, role, created_at")
+          .eq("org_id", currentOrg!.id)
+          .order("created_at"),
+        supabase
+          .from("user_profiles")
+          .select("user_id, display_name"),
+      ]);
+
+      if (!membershipsRes.data) {
         setLoadingMembers(false);
         return;
       }
 
-      // Fetch emails - we'll use the user_id to get emails from a simple approach
-      // Since we can't query auth.users from client, we'll show user_id for now
-      // In production, you'd have a profiles table or server action
-      const rows: MemberRow[] = memberships.map((m) => ({
+      const profileMap = new Map(
+        (profilesRes.data || []).map((p) => [p.user_id, p.display_name])
+      );
+
+      const rows: MemberRow[] = membershipsRes.data.map((m) => ({
         id: m.id,
         user_id: m.user_id,
-        email: m.user_id.slice(0, 8) + "...", // placeholder
+        email: profileMap.get(m.user_id) || m.user_id.slice(0, 8) + "...",
         role: m.role as OrgMember["role"],
         created_at: m.created_at,
       }));
