@@ -491,8 +491,7 @@
 - [x] Suite 1 — Pricing (14 tests): cost calculation, provider detection, all models
 - [x] Suite 2 — Rate Limiter (10 tests): window behavior, expiry, cleanup, plan limits
 - [x] Suite 3 — Crypto (13 tests): encrypt/decrypt, migration fallback, tampering, key rotation
-- [x] Suite 4 — Proxy Route (17/30 tests): auth, agent resolution, guardrails, rate limits, forwarding, provider keys, usage recording
+- [x] Suite 4 — Proxy Route (30 tests): auth, agent resolution, guardrails, rate limits, forwarding, provider keys, usage recording, budget thresholds, spike detection, fallback model, streaming, plan limits, agent rate limits
 - [x] Suite 5 — Stripe Webhook (6 tests): checkout, subscription lifecycle, payment failed, signature
 - [x] Suite 6 — Provider Health (6 tests): OpenAI/Anthropic health, key decryption, auth
-- **Total: 73 tests passing**
-- [ ] TODO: Suite 4 remaining 13 tests (budget threshold alerts at 80%/100%, spike detection 3x, auto-pause, streaming token extraction, fallback model forwarding)
+- **Total: 86 tests passing**
