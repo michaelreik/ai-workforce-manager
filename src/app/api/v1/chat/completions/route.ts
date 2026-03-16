@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/service";
-import { calculateCost, getProvider, MODEL_PRICING } from "@/lib/pricing";
+import { calculateCost, getProvider, MODEL_PRICING, calculateCostFromDb, getProviderFromDb, getModelPricingMap } from "@/lib/pricing";
 import { createAlert } from "@/lib/alerts";
 import { getPlanLimits, type PlanId } from "@/lib/stripe";
 import { checkRateLimit, getOrgRateLimit } from "@/lib/rate-limiter";
@@ -228,7 +228,7 @@ async function recordUsage(
   status: "completed" | "failed",
   errorMessage?: string
 ) {
-  const cost = calculateCost(model, inputTokens, outputTokens);
+  const cost = await calculateCostFromDb(supabase, model, inputTokens, outputTokens);
   const now = new Date();
   const today = now.toISOString().split("T")[0];
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
@@ -645,9 +645,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 6. Determine model to use and provider
-  const modelToUse = requestedModel in MODEL_PRICING ? requestedModel : agent.model;
-  const provider = getProvider(modelToUse);
+  // 6. Determine model to use and provider (DB-first, static fallback)
+  const pricingMap = await getModelPricingMap(supabase);
+  const modelToUse = (pricingMap.has(requestedModel) || requestedModel in MODEL_PRICING)
+    ? requestedModel
+    : agent.model;
+  const provider = await getProviderFromDb(supabase, modelToUse) || getProvider(modelToUse);
   const isStream = body.stream === true;
 
   if (!provider) {
@@ -720,7 +723,7 @@ export async function POST(request: NextRequest) {
 
     // If primary model fails and fallback is available, retry
     if (!providerResponse.ok && agent.fallback_model) {
-      const fallbackProvider = getProvider(agent.fallback_model);
+      const fallbackProvider = await getProviderFromDb(supabase, agent.fallback_model) || getProvider(agent.fallback_model);
       // Try DB provider for fallback, then env var
       let fallbackKey: string | null = null;
       if (fallbackProvider) {
@@ -792,7 +795,7 @@ export async function POST(request: NextRequest) {
 
   // 9. Handle streaming response
   if (isStream && providerResponse.body) {
-    const streamProvider = provider || getProvider(usedModel);
+    const streamProvider = provider;
     const { readable, writable } = new TransformStream();
     const writer = writable.getWriter();
     const extractedUsage = { input: 0, output: 0 };
@@ -935,7 +938,7 @@ export async function POST(request: NextRequest) {
   const rawBody = await providerResponse.json();
 
   // Convert Anthropic response to OpenAI format for transparent proxy
-  if (provider === "anthropic" || getProvider(usedModel) === "anthropic") {
+  if (provider === "anthropic") {
     responseBody = anthropicToOpenAI(rawBody, usedModel);
   } else {
     responseBody = rawBody;
