@@ -43,6 +43,7 @@ import {
   Key,
   Cable,
   Link as LinkIcon,
+  DollarSign,
 } from "lucide-react";
 import Link from "next/link";
 import type { OrgMember } from "@/types/database";
@@ -331,8 +332,8 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Quick links to Providers, API Keys and Integration */}
-          <div className="grid gap-4 sm:grid-cols-3">
+          {/* Quick links to Providers, API Keys, Integration and Pricing */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card className="group hover:border-foreground/20 transition-colors">
               <Link href="/settings/providers" className="block">
                 <CardContent className="flex items-center gap-4 py-6">
@@ -367,6 +368,19 @@ export default function SettingsPage() {
                     <p className="font-medium text-sm">{t("integration")}</p>
                     <p className="text-xs text-muted-foreground">
                       {t("integrationDesc")}
+                    </p>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
+            <Card className="group hover:border-foreground/20 transition-colors">
+              <Link href="/settings/pricing" className="block">
+                <CardContent className="flex items-center gap-4 py-6">
+                  <DollarSign className="h-8 w-8 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <div>
+                    <p className="font-medium text-sm">Model Pricing</p>
+                    <p className="text-xs text-muted-foreground">
+                      Auto-synced model prices &amp; overrides
                     </p>
                   </div>
                 </CardContent>

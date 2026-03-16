@@ -275,3 +275,18 @@ export type SurveyResponse = {
   answers: Record<string, unknown>;
   submitted_at: string;
 };
+
+export type ModelPricingRecord = {
+  id: string;
+  name: string;
+  provider: string;
+  input_price: number;
+  output_price: number;
+  context_length: number | null;
+  openrouter_id: string | null;
+  is_available: boolean;
+  is_custom: boolean;
+  last_synced_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
