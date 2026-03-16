@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: propup-prod
+spec:
+  dnsNames:
+    - openmanage.ai
+  secretName: production-openmanage-tls
+  issuerRef:
+    name: cert-issuer
+    kind: ClusterIssuer

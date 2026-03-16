@@ -93,6 +93,7 @@ jobs:
           export DOCKER_IMAGE=${{ env.DOCKER_IMAGE }}
           kubectl create namespace openmanage-staging --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f k8s/staging/configmap.yml
+          kubectl apply -f k8s/staging/certificate.yml
           envsubst < k8s/staging/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/staging/service.yml
           kubectl apply -f k8s/staging/ingress.yml
@@ -132,6 +133,7 @@ jobs:
           export DOCKER_IMAGE=${{ env.DOCKER_IMAGE }}
           kubectl create namespace openmanage-production --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f k8s/production/configmap.yml
+          kubectl apply -f k8s/production/certificate.yml
           envsubst < k8s/production/deployment.yml | kubectl apply -f -
           kubectl apply -f k8s/production/service.yml
           kubectl apply -f k8s/production/ingress.yml
