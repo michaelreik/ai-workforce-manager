@@ -236,7 +236,7 @@ export default function SurveysPage() {
                 <TableHead>{t("surveyTitle")}</TableHead>
                 <TableHead>{t("surveyStatus")}</TableHead>
                 <TableHead>{t("surveyResponses")}</TableHead>
-                <TableHead>{t("surveyCreated")}</TableHead>
+                <TableHead>{t("surveyCreatedDate")}</TableHead>
                 <TableHead className="w-32"></TableHead>
               </TableRow>
             </TableHeader>

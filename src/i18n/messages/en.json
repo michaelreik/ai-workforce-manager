@@ -965,7 +965,7 @@
     "surveyDescription": "Description",
     "surveyStatus": "Status",
     "surveyResponses": "Responses",
-    "surveyCreated": "Created",
+    "surveyCreatedDate": "Created",
     "surveyTemplates": "Start from template",
     "surveyAnonymous": "Anonymous responses",
     "surveyAnonymousDesc": "Respondent names will not be recorded",

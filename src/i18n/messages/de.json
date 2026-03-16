@@ -852,7 +852,7 @@
 
     "footerStuck": "Immer noch Probleme? E-Mail an support@openmanage-ai.com",
     "footerLanding": "Startseite",
-    "footerLogin": "Login",
+    "footerLogin": "Anmelden",
     "footerSignup": "Registrieren"
   },
   "workspace": {
@@ -965,6 +965,7 @@
     "surveyDescription": "Beschreibung",
     "surveyStatus": "Status",
     "surveyResponses": "Antworten",
+    "surveyCreatedDate": "Erstellt",
     "surveyTemplates": "Mit Vorlage starten",
     "surveyAnonymous": "Anonyme Antworten",
     "surveyAnonymousDesc": "Namen der Teilnehmer werden nicht erfasst",
